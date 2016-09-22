@@ -78,10 +78,43 @@ object Main extends App {
   private def loop(window: Long) {
     GL.createCapabilities()
 
-    glClearColor(0f, 255f, 0f, 0f)
+    glClearColor(0f, 0f, 0f, 0f)
+
+    val offsets = Array(0f,0f)
 
     while (!glfwWindowShouldClose(window)) {
+
+      if (glfwGetKey(window, GLFW_KEY_W) == GL_TRUE) {
+        offsets(1) += 0.01f
+      }
+      if (glfwGetKey(window, GLFW_KEY_A) == GL_TRUE) {
+        offsets(0) -= 0.01f
+      }
+      if (glfwGetKey(window, GLFW_KEY_S) == GL_TRUE) {
+        offsets(1) -= 0.01f
+      }
+      if (glfwGetKey(window, GLFW_KEY_D) == GL_TRUE) {
+        offsets(0) += 0.01f
+      }
+
+
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+      glBegin(GL_QUADS)
+        glColor4f(1, 0, 0, 0)
+        glVertex2f(-0.5f + offsets(0), 0.5f + offsets(1))
+
+        glColor4f(0, 1, 0, 0)
+        glVertex2f(0.5f + offsets(0), 0.5f + offsets(1))
+
+        glColor4f(0, 0, 1, 0)
+        glVertex2f(0.5f + offsets(0), -0.5f + offsets(1))
+
+
+        glColor4f(1, 1, 1, 0)
+        glVertex2f(-0.5f + offsets(0), -0.5f + offsets(1))
+      glEnd()
+
       glfwSwapBuffers(window)
       glfwPollEvents()
     }

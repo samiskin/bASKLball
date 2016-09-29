@@ -31,11 +31,16 @@ object Main extends App {
   private val WIDTH  = 800
   private val HEIGHT = 600
 
+  private var renderer: Renderer = _
+
   def run() {
     try {
       GLFWErrorCallback.createPrint(System.err).set()
 
       val window = init()
+      renderer = new Renderer()
+      renderer.init()
+
       loop(window)
 
       glfwFreeCallbacks(window)
@@ -45,6 +50,7 @@ object Main extends App {
     }
   }
 
+  @throws(classOf[Exception])
   private def init(): Long = {
     if (!glfwInit())
       throw new IllegalStateException("Unable to initialize GLFW")
@@ -52,6 +58,13 @@ object Main extends App {
     glfwDefaultWindowHints()
     glfwWindowHint(GLFW_VISIBLE,   GLFW_FALSE) // hiding the window
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE) // window resizing not allowed
+
+
+    // Enable higher OpenGL version
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
     val window = glfwCreateWindow(WIDTH, HEIGHT, "LWJGL in Scala", NULL, NULL)
     if (window == NULL)
@@ -80,14 +93,12 @@ object Main extends App {
   private def cleanup(): Unit = {
     glfwTerminate() // destroys all remaining windows, cursors, etc...
     glfwSetErrorCallback(null).free()
-  }
-
-  private def clear(): Unit = {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    if (renderer != null) {
+      renderer.cleanup()
+    }
   }
 
   private def loop(window: Long) {
-
     val offsets = Array(0f,0f)
 
     while (!glfwWindowShouldClose(window)) {
@@ -105,9 +116,7 @@ object Main extends App {
         offsets(0) += 0.01f
       }
 
-      clear()
-
-      glBegin(GL_QUADS)
+/*      glBegin(GL_QUADS)
         glColor4f(1, 0, 0, 0)
         glVertex2f(-0.5f + offsets(0), 0.5f + offsets(1))
 
@@ -120,7 +129,8 @@ object Main extends App {
 
         glColor4f(1, 1, 1, 0)
         glVertex2f(-0.5f + offsets(0), -0.5f + offsets(1))
-      glEnd()
+      glEnd()*/
+      renderer.render(window)
 
       glfwSwapBuffers(window)
       glfwPollEvents()

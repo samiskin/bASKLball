@@ -1,6 +1,6 @@
 package com.example
 
-import org.lwjgl.opengl.GL20._
+import org.lwjgl.opengl._, GL11._, GL20._
 
 class ShaderProgram {
 
@@ -31,7 +31,7 @@ class ShaderProgram {
     glShaderSource(shaderId, shaderCode)
     glCompileShader(shaderId)
 
-    if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
+    if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == GL_FALSE) {
       val infoLog = glGetShaderInfoLog(shaderId)
       throw new Exception(s"Error compiling shader: $infoLog")
     }
@@ -43,13 +43,13 @@ class ShaderProgram {
   @throws(classOf[Exception])
   def link(): Unit = {
     glLinkProgram(programId)
-    if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
+    if (glGetProgrami(programId, GL_LINK_STATUS) == GL_FALSE) {
       val infoLog = glGetProgramInfoLog(programId)
       throw new Exception(s"Error linking shader: $infoLog")
     }
 
     glValidateProgram(programId)
-    if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
+    if (glGetProgrami(programId, GL_VALIDATE_STATUS) == GL_FALSE) {
       val infoLog = glGetProgramInfoLog(programId)
       System.err.println(s"Warning validating shader: $infoLog")
     }

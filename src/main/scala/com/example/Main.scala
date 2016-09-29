@@ -41,8 +41,7 @@ object Main extends App {
       glfwFreeCallbacks(window)
       glfwDestroyWindow(window)
     } finally {
-      glfwTerminate() // destroys all remaining windows, cursors, etc...
-      glfwSetErrorCallback(null).free()
+      cleanup()
     }
   }
 
@@ -72,13 +71,22 @@ object Main extends App {
     glfwSwapInterval(1)
     glfwShowWindow(window)
 
+    GL.createCapabilities()
+    glClearColor(0f, 0f, 0f, 0f)
+
     window
   }
 
-  private def loop(window: Long) {
-    GL.createCapabilities()
+  private def cleanup(): Unit = {
+    glfwTerminate() // destroys all remaining windows, cursors, etc...
+    glfwSetErrorCallback(null).free()
+  }
 
-    glClearColor(0f, 0f, 0f, 0f)
+  private def clear(): Unit = {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+  }
+
+  private def loop(window: Long) {
 
     val offsets = Array(0f,0f)
 
@@ -97,8 +105,7 @@ object Main extends App {
         offsets(0) += 0.01f
       }
 
-
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+      clear()
 
       glBegin(GL_QUADS)
         glColor4f(1, 0, 0, 0)

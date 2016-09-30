@@ -20,19 +20,17 @@
 
 package ca.uwaterloo.basklball
 
-import org.lwjgl.glfw.GLFW._
-
 object Main extends App {
   private val WIDTH  = 800
   private val HEIGHT = 600
 
-  private var renderer: Renderer = _
   private var window: Window = _
+  private var game: Game = _
 
   def run() {
     try {
       window = new Window("bASKLball", WIDTH, HEIGHT)
-      renderer = new Renderer()
+      game = new Game()
 
       loop(window)
 
@@ -42,34 +40,18 @@ object Main extends App {
   }
 
   private def cleanup(): Unit = {
-    if (renderer != null) {
-      renderer.cleanup()
-    }
     if (window != null) {
       window.cleanup()
+    }
+    if (game != null) {
+      game.cleanup()
     }
   }
 
   private def loop(window: Window) {
-    var xOffset = 0.0f
-    var yOffset = 0.0f
-
     while (!window.windowShowClose()) {
-
-      if (window.isKeyPressed(GLFW_KEY_W)) {
-        yOffset += 0.01f
-      }
-      if (window.isKeyPressed(GLFW_KEY_A)) {
-        xOffset -= 0.01f
-      }
-      if (window.isKeyPressed(GLFW_KEY_S)) {
-        yOffset -= 0.01f
-      }
-      if (window.isKeyPressed(GLFW_KEY_D)) {
-        xOffset += 0.01f
-      }
-
-      renderer.render(window, xOffset, yOffset)
+      game.update(window, 0.0f) // TODO change interval
+      game.render(window)
 
       window.update()
     }

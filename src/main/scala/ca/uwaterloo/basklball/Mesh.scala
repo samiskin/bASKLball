@@ -51,6 +51,20 @@ class Mesh(positions: Array[Float], colors: Array[Float], indices: Array[Int]) {
     (vaoId, posVboId, colorVboId, idxVboId)
   }
 
+  def render(): Unit = {
+    // positions, colors, indices, etc are included in the VAO
+    glBindVertexArray(vaoId)
+    glEnableVertexAttribArray(0) // enable positions
+    glEnableVertexAttribArray(1) // enable colors
+
+    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0)
+
+    // Restore state
+    glDisableVertexAttribArray(0)
+    glDisableVertexAttribArray(1)
+    glBindVertexArray(0)
+  }
+
   def cleanup(): Unit = {
     glDisableVertexAttribArray(0)
 

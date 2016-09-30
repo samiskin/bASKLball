@@ -46,7 +46,7 @@ object Main extends App {
   }
 
   private def loop(window: Window) {
-    while (!window.windowShowClose()) {
+    while (!window.shouldClose) {
       game.update(window, 0.0f) // TODO change interval
       game.render(window)
 

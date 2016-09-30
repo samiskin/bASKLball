@@ -5,7 +5,7 @@ import Callbacks._, GLFW._, GL11._
 
 import org.lwjgl.system.MemoryUtil._
 
-class Window(title: String, width: Int, height: Int) {
+class Window(val title: String, val width: Int, val height: Int) {
   import CallbackHelpers._
 
   private val window = {
@@ -55,7 +55,7 @@ class Window(title: String, width: Int, height: Int) {
 
   def isKeyPressed(keyCode: Int) = glfwGetKey(window, keyCode) == GLFW_PRESS
 
-  def windowShowClose() = glfwWindowShouldClose(window)
+  def shouldClose = glfwWindowShouldClose(window)
 
   def update(): Unit = {
     glfwSwapBuffers(window)

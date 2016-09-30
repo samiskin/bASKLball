@@ -8,14 +8,16 @@ object Game {
 }
 
 class Game {
+  private val renderer = new Renderer()
+
   // A square
-  private val mesh = {
+  private val square = {
     // x,y,z coordinates
     val positions = Array(
       -0.5f,  0.5f, -1.0f,
       -0.5f, -0.5f, -2.0f,
-       0.5f, -0.5f, -3.0f,
-       0.5f,  0.5f, -1.0f
+      0.5f, -0.5f, -3.0f,
+      0.5f,  0.5f, -1.0f
     )
     // color corresponding to points in positions
     val colors = Array(
@@ -27,30 +29,28 @@ class Game {
     // Each element in this array defines a vertex. The attrs of the vertex are looked up in the
     // previous matrices
     val indices = Array(0, 1, 3, 3, 1, 2)
-    new Mesh(positions, colors, indices)
+    val mesh = new Mesh(positions, colors, indices)
+    new GameObject(mesh)
   }
-  private val renderer = new Renderer()
-
-  private var xOffset = 0.0f
-  private var yOffset = 0.0f
+  private val gameObjects = Array(square)
 
   def update(window: Window, interval: Float): Unit = {
     if (window.isKeyPressed(GLFW_KEY_W)) {
-      yOffset += 0.01f
+      square.position.y += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_A)) {
-      xOffset -= 0.01f
+      square.position.x -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_S)) {
-      yOffset -= 0.01f
+      square.position.y -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_D)) {
-      xOffset += 0.01f
+      square.position.x += 0.01f
     }
   }
 
   def render(window: Window): Unit = {
-    renderer.render(window, mesh)
+    renderer.render(window, gameObjects)
   }
 
   def cleanup(): Unit = {

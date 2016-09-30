@@ -11,8 +11,6 @@ lazy val startOnFirst =
 
 val lwjglVersion = "3.0.0"
 
-val jomlVersion = "1.8.4"
-
 //// Setting up native library extraction ////
 
 ivyConfigurations += config("natives")
@@ -63,12 +61,13 @@ javaOptions ++= {
 }
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest"      % "3.0.0"      % "test",
-  "org.lwjgl"      % "lwjgl"          % lwjglVersion,
-  "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-windows",
-  "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-linux",
-  "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-osx",
-  "org.joml"       % "joml"           % jomlVersion
+  "org.scalatest"   %% "scalatest"      % "3.0.0"      % "test",
+  "org.lwjgl"        % "lwjgl"          % lwjglVersion,
+  "org.lwjgl"        % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-windows",
+  "org.lwjgl"        % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-linux",
+  "org.lwjgl"        % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-osx",
+  "org.joml"         % "joml"           % "1.8.4",
+  "org.l33tlabs.twl" % "pngdecoder"     % "1.0"
 )
 
 nativeExtractions <<= (baseDirectory) { base => Seq (

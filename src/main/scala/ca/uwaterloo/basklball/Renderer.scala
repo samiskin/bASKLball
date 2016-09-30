@@ -9,11 +9,12 @@ class Renderer {
   private val Z_FAR = 1000.0f
 
   private val shaderProgram: ShaderProgram = new ShaderProgram
-  shaderProgram.createVertexShader(Utils.loadResources("/vertex.vs.glsl"))
-  shaderProgram.createFragmentShader(Utils.loadResources("/fragment.fs.glsl"))
+  shaderProgram.createVertexShader(Utils.loadResources("/shaders/vertex.vs.glsl"))
+  shaderProgram.createFragmentShader(Utils.loadResources("/shaders/fragment.fs.glsl"))
   shaderProgram.link()
   shaderProgram.createUniform("projectionMatrix")
   shaderProgram.createUniform("worldMatrix")
+  shaderProgram.createUniform("texture_sampler")
 
   private val transformation = new Transformation
 
@@ -29,6 +30,7 @@ class Renderer {
 
     shaderProgram.bind()
     shaderProgram.setUniform("projectionMatrix", projectionMatrix)
+    shaderProgram.setUniform("texture_sampler", 0)
 
     for (gameObject <- gameObjects) {
       val worldMatrix =

@@ -35,6 +35,10 @@ class ShaderProgram {
     glUniformMatrix4fv(uniforms(uniformName), false, buffer)
   }
 
+  def setUniform(uniformName: String, value: Int): Unit = {
+    glUniform1i(uniforms(uniformName), value)
+  }
+
   def createVertexShader(shaderCode: String): Unit = {
     vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER)
   }

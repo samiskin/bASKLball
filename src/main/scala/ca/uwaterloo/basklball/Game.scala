@@ -21,18 +21,22 @@ class Game {
       -0.5f,  0.5f, -0.5f,
       0.5f,  0.5f, -0.5f,
       -0.5f, -0.5f, -0.5f,
+      0.5f, -0.5f, -0.5f,
+      -0.5f, -0.5f, -0.5f, // repeat vertices for proper texture
       0.5f, -0.5f, -0.5f
     )
-    // color corresponding to points in positions
-    val colors = Array(
-      0.5f, 0.0f, 0.0f,
-      0.0f, 0.5f, 0.0f,
-      0.0f, 0.0f, 0.5f,
-      0.0f, 0.5f, 0.5f,
-      0.5f, 0.0f, 0.0f,
-      0.0f, 0.5f, 0.0f,
-      0.0f, 0.0f, 0.5f,
-      0.0f, 0.5f, 0.5f
+    // corresponds to points in positions
+    val textureCoordinates = Array(
+      0.0f, 0.0f, // 0
+      0.0f, 2.0f, // 1
+      2.0f, 2.0f, // 2
+      2.0f, 0.0f, // 3
+      0.0f, 2.0f, // 4
+      0.0f, 0.0f, // 2
+      2.0f, 2.0f, // 6
+      0.0f, 2.0f, // 7
+      0.0f, 0.0f, // 8
+      2.0f, 0.0f  // 9
     )
     // Each element in this array defines a vertex. The attrs of the vertex are looked up in the
     // previous matrices
@@ -41,10 +45,11 @@ class Game {
       4, 0, 3, 5, 4, 3, // top
       3, 2, 7, 5, 3, 7, // right
       0, 1, 6, 4, 0, 6, // left
-      6, 1, 2, 7, 6, 2, // bottom
-      4, 6, 7, 5, 4, 7  // back
+      8, 1, 2, 9, 8, 2, // bottom
+      4, 8, 9, 5, 4, 9  // back
     )
-    val mesh = new Mesh(positions, colors, indices)
+    val texture = new Texture("/textures/basketball512.png")
+    val mesh = new Mesh(positions, textureCoordinates, indices, texture)
     val cube = new GameObject(mesh)
     cube.position.z = -2.0f
     cube
@@ -99,7 +104,7 @@ class Game {
     }
     if (window.isKeyPressed(GLFW_KEY_SPACE)) {
       ball.reset()
-      ball.position.z = -1.0f
+      ball.position.z = -2.0f
     }
   }
 

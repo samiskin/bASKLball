@@ -67,7 +67,9 @@ class Game {
     ball3.position.z = -1.0f
     ball3.position.x = -0.7f
     ball3.scale = 0.5f
-    Array(ball, ball2, ball3)
+    val skybox = new Skybox("/textures/skybox.png")
+    skybox.scale = 20.0f
+    Array(ball, ball2, ball3, skybox)
   }
 
   private val camera = new Camera()

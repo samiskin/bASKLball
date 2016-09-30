@@ -2,7 +2,13 @@ package ca.uwaterloo.basklball
 
 import org.joml.{Matrix4f}
 
+object Transformation {
+  def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat
+}
+
 class Transformation {
+  import Transformation.toRad
+
   // Avoid allocating matrices often
   private val projMatrixBuffer = new Matrix4f()
   private val viewMatrixBuffer = new Matrix4f()
@@ -39,6 +45,4 @@ class Transformation {
       .scale(obj.scale)
     viewMatrix.mul(modelViewMatrixBuffer, modelViewMatrixBuffer)
   }
-
-  private def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat
 }

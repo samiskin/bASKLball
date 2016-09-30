@@ -3,19 +3,17 @@ package ca.uwaterloo.basklball
 import org.lwjgl.glfw.GLFW._
 
 class Game {
-
-  private val renderer = new Renderer()
   private val mesh = {
     val positions = Array(
       -0.5f,  0.5f, 0.0f,
       -0.5f, -0.5f, 0.0f,
-       0.5f,  0.5f, 0.0f,
-       0.5f,  0.5f, 0.0f,
-      -0.5f, -0.5f, 0.0f,
-       0.5f, -0.5f, 0.0f
+       0.5f, -0.5f, 0.0f,
+       0.5f,  0.5f, 0.0f
     )
-    new Mesh(positions)
+    val indices = Array(0, 1, 3, 3, 1, 2)
+    new Mesh(positions, indices)
   }
+  private val renderer = new Renderer()
 
   private var xOffset = 0.0f
   private var yOffset = 0.0f

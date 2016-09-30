@@ -10,6 +10,7 @@ object Game {
 
 class Game {
   private val renderer = new Renderer()
+  private val gameState = new GameState()
 
   private val cubeMesh = {
     // x,y,z coordinates

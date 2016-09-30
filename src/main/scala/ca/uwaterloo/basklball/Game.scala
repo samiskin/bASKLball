@@ -70,6 +70,8 @@ class Game {
     Array(ball, ball2, ball3)
   }
 
+  private val camera = new Camera()
+
   def update(window: Window, interval: Float): Unit = {
     // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -92,16 +94,16 @@ class Game {
     }
     // Rotation
     if (window.isKeyPressed(GLFW_KEY_I)) {
-      ball.rotation.x += 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_K)) {
       ball.rotation.x -= 1.0f
     }
+    if (window.isKeyPressed(GLFW_KEY_K)) {
+      ball.rotation.x += 1.0f
+    }
     if (window.isKeyPressed(GLFW_KEY_J)) {
-      ball.rotation.y += 1.0f
+      ball.rotation.y -= 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_L)) {
-      ball.rotation.y -= 1.0f
+      ball.rotation.y += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_U)) {
       ball.rotation.z += 1.0f
@@ -120,10 +122,29 @@ class Game {
       ball.reset()
       ball.position.z = -2.0f
     }
+    // Translate camera
+    if (window.isKeyPressed(GLFW_KEY_G)) {
+      camera.position.x -= 0.01f
+    }
+    if (window.isKeyPressed(GLFW_KEY_H)) {
+      camera.position.x += 0.01f
+    }
+    if (window.isKeyPressed(GLFW_KEY_Y)) {
+      camera.position.y += 0.01f
+    }
+    if (window.isKeyPressed(GLFW_KEY_B)) {
+      camera.position.y -= 0.01f
+    }
+    if (window.isKeyPressed(GLFW_KEY_V)) {
+      camera.position.z += 0.01f
+    }
+    if (window.isKeyPressed(GLFW_KEY_N)) {
+      camera.position.z -= 0.01f
+    }
   }
 
   def render(window: Window): Unit = {
-    renderer.render(window, gameObjects)
+    renderer.render(window, camera, gameObjects)
   }
 
   def cleanup(): Unit = {

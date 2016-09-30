@@ -13,7 +13,7 @@ class Renderer {
   shaderProgram.createFragmentShader(Utils.loadResources("/shaders/fragment.fs.glsl"))
   shaderProgram.link()
   shaderProgram.createUniform("projectionMatrix")
-  shaderProgram.createUniform("worldMatrix")
+  shaderProgram.createUniform("modelViewMatrix")
   shaderProgram.createUniform("texture_sampler")
 
   private val transformation = new Transformation
@@ -22,7 +22,7 @@ class Renderer {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
   }
 
-  def render(window: Window, gameObjects: Array[GameObject]): Unit = {
+  def render(window: Window, camera: Camera, gameObjects: Array[GameObject]): Unit = {
     clear()
 
     val projectionMatrix = transformation.projectionMatrix(
@@ -32,10 +32,12 @@ class Renderer {
     shaderProgram.setUniform("projectionMatrix", projectionMatrix)
     shaderProgram.setUniform("texture_sampler", 0)
 
+    val viewMatrix = transformation.viewMatrix(camera)
+
     for (gameObject <- gameObjects) {
-      val worldMatrix =
-        transformation.worldMatrix(gameObject.position, gameObject.rotation, gameObject.scale)
-      shaderProgram.setUniform("worldMatrix", worldMatrix)
+      val modelViewMatrix =
+        transformation.modelViewMatrix(gameObject, viewMatrix)
+      shaderProgram.setUniform("modelViewMatrix", modelViewMatrix)
 
       gameObject.mesh.render()
     }

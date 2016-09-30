@@ -12,7 +12,6 @@ class ShaderProgram {
     throw new Exception("Could not create Shader")
   }
 
-  @throws(classOf[Exception])
   def createVertexShader(shaderCode: String): Unit = {
     vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER)
   }
@@ -21,7 +20,6 @@ class ShaderProgram {
     fragmentShaderId = createShader(shaderCode, GL_FRAGMENT_SHADER)
   }
 
-  @throws(classOf[Exception])
   protected def createShader(shaderCode: String, shaderType: Int): Int = {
     val shaderId = glCreateShader(shaderType)
     if (shaderId == 0) {
@@ -40,7 +38,6 @@ class ShaderProgram {
     shaderId
   }
 
-  @throws(classOf[Exception])
   def link(): Unit = {
     glLinkProgram(programId)
     if (glGetProgrami(programId, GL_LINK_STATUS) == GL_FALSE) {

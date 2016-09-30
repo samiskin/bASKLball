@@ -10,8 +10,7 @@ object Game {
 class Game {
   private val renderer = new Renderer()
 
-  // A cube despite the name
-  private val ball = {
+  private val cubeMesh = {
     // x,y,z coordinates
     val positions = Array(
       -0.5f,  0.5f,  0.5f,
@@ -49,12 +48,27 @@ class Game {
       4, 8, 9, 5, 4, 9  // back
     )
     val texture = new Texture("/textures/basketball512.png")
-    val mesh = new Mesh(positions, textureCoordinates, indices, texture)
-    val cube = new GameObject(mesh)
-    cube.position.z = -2.0f
-    cube
+    new Mesh(positions, textureCoordinates, indices, texture)
   }
-  private val gameObjects = Array(ball)
+
+  // A cube despite the name
+  private val ball = {
+    val ball = new GameObject(cubeMesh)
+    ball.position.z = -2.0f
+    ball
+  }
+
+  private val gameObjects = {
+    val ball2 = new GameObject(cubeMesh)
+    ball2.position.z = -1.0f
+    ball2.position.x = 0.7f
+    ball2.scale = 0.5f
+    val ball3 = new GameObject(cubeMesh)
+    ball3.position.z = -1.0f
+    ball3.position.x = -0.7f
+    ball3.scale = 0.5f
+    Array(ball, ball2, ball3)
+  }
 
   def update(window: Window, interval: Float): Unit = {
     // Position

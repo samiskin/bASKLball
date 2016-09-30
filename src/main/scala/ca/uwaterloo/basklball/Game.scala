@@ -73,43 +73,49 @@ class Game {
   private val camera = new Camera()
 
   def update(window: Window, interval: Float): Unit = {
+    val (position, rotation) = {
+      if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT))
+        (camera.position, camera.rotation)
+      else
+        (ball.position, ball.rotation)
+    }
     // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
-      ball.position.y += 0.01f
+      position.y += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_A)) {
-      ball.position.x -= 0.01f
+      position.x -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_S)) {
-      ball.position.y -= 0.01f
+      position.y -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_D)) {
-      ball.position.x += 0.01f
+      position.x += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_Q)) {
-      ball.position.z += 0.01f
+      position.z += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_E)) {
-      ball.position.z -= 0.01f
+      position.z -= 0.01f
     }
     // Rotation
     if (window.isKeyPressed(GLFW_KEY_I)) {
-      ball.rotation.x -= 1.0f
+      rotation.x -= 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_K)) {
-      ball.rotation.x += 1.0f
+      rotation.x += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_J)) {
-      ball.rotation.y -= 1.0f
+      rotation.y -= 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_L)) {
-      ball.rotation.y += 1.0f
+      rotation.y += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_U)) {
-      ball.rotation.z += 1.0f
+      rotation.z += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_O)) {
-      ball.rotation.z -= 1.0f
+      rotation.z -= 1.0f
     }
     // Scale
     if (window.isKeyPressed(GLFW_KEY_R)) {
@@ -119,27 +125,12 @@ class Game {
       ball.scale *= 0.99f
     }
     if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-      ball.reset()
+      ball.position.zero()
+      ball.rotation.zero()
+      ball.scale = 1.0f
       ball.position.z = -2.0f
-    }
-    // Translate camera
-    if (window.isKeyPressed(GLFW_KEY_G)) {
-      camera.position.x -= 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_H)) {
-      camera.position.x += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_Y)) {
-      camera.position.y += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_B)) {
-      camera.position.y -= 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_V)) {
-      camera.position.z += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_N)) {
-      camera.position.z -= 0.01f
+      camera.position.zero()
+      camera.rotation.zero()
     }
   }
 

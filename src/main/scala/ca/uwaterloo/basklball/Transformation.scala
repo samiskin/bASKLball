@@ -23,14 +23,15 @@ class Transformation {
   // Calls to viewMatrix() mutate the same underlying matrix
   def viewMatrix(camera: Camera): Matrix4f = {
     val pos = camera.position
+    val rot = camera.rotation
     viewMatrixBuffer
       .identity()
+      .rotateXYZ(toRad(rot.x), toRad(rot.y), toRad(rot.z))
       .translate(-pos.x, -pos.y, -pos.z)
   }
 
   // Calls to modelViewMatrix() mutate the same underlying matrix
   def modelViewMatrix(obj: GameObject, viewMatrix: Matrix4f): Matrix4f = {
-    def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat
     modelViewMatrixBuffer
       .identity()
       .translate(obj.position)
@@ -39,4 +40,5 @@ class Transformation {
     viewMatrix.mul(modelViewMatrixBuffer, modelViewMatrixBuffer)
   }
 
+  private def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat
 }

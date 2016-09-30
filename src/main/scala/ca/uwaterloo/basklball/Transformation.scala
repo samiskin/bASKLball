@@ -7,6 +7,7 @@ class Transformation {
   private val projMatrixBuffer = new Matrix4f()
   private val worldMatrixBuffer = new Matrix4f()
 
+  // Calls to projectionMatrix() mutate the same underlying matrix
   def projectionMatrix(fov: Float,
                        width: Float,
                        height: Float,
@@ -18,6 +19,7 @@ class Transformation {
       .perspective(fov, aspectRatio, zNear, zFar)
   }
 
+  // Calls to worldMatrix() mutate the same underlying matrix
   def worldMatrix(offset: Vector3f, rotation: Vector3f, scale: Float): Matrix4f = {
     def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat
     worldMatrixBuffer

@@ -47,6 +47,18 @@ class Game {
     if (window.isKeyPressed(GLFW_KEY_D)) {
       square.position.x += 0.01f
     }
+    if (window.isKeyPressed(GLFW_KEY_Q)) {
+      square.rotation.z += 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_E)) {
+      square.rotation.z -= 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_R)) {
+      square.scale *= 1.02f
+    }
+    if (window.isKeyPressed(GLFW_KEY_F)) {
+      square.scale *= 0.98f
+    }
   }
 
   def render(window: Window): Unit = {

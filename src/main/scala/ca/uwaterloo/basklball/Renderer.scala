@@ -5,25 +5,23 @@ import org.lwjgl.opengl._, GL11._, GL15._, GL20._, GL30._
 
 class Renderer {
   private var shaderProgram: ShaderProgram = _
-  private var vaoId: Int = _  // vertex array object
-  private var vboId: Int = _  // vertex buffer object
 
-  def init(): Unit = {
+  private val (vaoId, vboId) = {
     // Vertices of a square
     val vertices = Array(
-       0.0f,  0.5f,  0.0f,
+      0.0f,  0.5f,  0.0f,
       -0.5f, -0.5f,  0.0f,
-       0.5f, -0.5f,  0.0f
+      0.5f, -0.5f,  0.0f
     )
     val verticesBuffer = BufferUtils.createFloatBuffer(vertices.length)
     verticesBuffer.put(vertices).flip()
 
     // Create and bind to VAO
-    vaoId = glGenVertexArrays()
+    val vaoId = glGenVertexArrays()
     glBindVertexArray(vaoId)
 
     // Create and bind to VBO
-    vboId = glGenBuffers()
+    val vboId = glGenBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, vboId)
     glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW)
 
@@ -38,6 +36,8 @@ class Renderer {
     // Unbind the VBO and VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0)
     glBindVertexArray(0)
+
+    (vaoId, vboId)
   }
 
   def clear(): Unit = {

@@ -8,9 +8,7 @@ import org.lwjgl.system.MemoryUtil._
 class Window(title: String, width: Int, height: Int) {
   import CallbackHelpers._
 
-  var window: Long = _
-
-  def init(): Unit = {
+  private val window = {
     glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err))
 
     if (!glfwInit()) {
@@ -27,7 +25,7 @@ class Window(title: String, width: Int, height: Int) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
-    window = glfwCreateWindow(width, height, title, NULL, NULL)
+    val window = glfwCreateWindow(width, height, title, NULL, NULL)
     if (window == NULL)
       throw new RuntimeException("Failed to create the GLFW window")
 
@@ -51,6 +49,8 @@ class Window(title: String, width: Int, height: Int) {
 
     GL.createCapabilities()
     glClearColor(0f, 0f, 0f, 0f)
+
+    window
   }
 
   def isKeyPressed(keyCode: Int) = glfwGetKey(window, keyCode) == GLFW_PRESS

@@ -32,10 +32,7 @@ object Main extends App {
   def run() {
     try {
       window = new Window("bASKLball", WIDTH, HEIGHT)
-      window.init()
-
       renderer = new Renderer()
-      renderer.init()
 
       loop(window)
 

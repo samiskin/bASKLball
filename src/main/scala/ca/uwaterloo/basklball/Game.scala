@@ -10,17 +10,25 @@ object Game {
 class Game {
   private val renderer = new Renderer()
 
-  // A square
-  private val square = {
+  // A cube despite the name
+  private val ball = {
     // x,y,z coordinates
     val positions = Array(
-      -0.5f,  0.5f, 0.0f,
-      -0.5f, -0.5f, 0.0f,
-      0.5f, -0.5f, 0.0f,
-      0.5f,  0.5f, 0.0f
+      -0.5f,  0.5f,  0.5f,
+      -0.5f, -0.5f,  0.5f,
+      0.5f, -0.5f,  0.5f,
+      0.5f,  0.5f,  0.5f,
+      -0.5f,  0.5f, -0.5f,
+      0.5f,  0.5f, -0.5f,
+      -0.5f, -0.5f, -0.5f,
+      0.5f, -0.5f, -0.5f
     )
     // color corresponding to points in positions
     val colors = Array(
+      0.5f, 0.0f, 0.0f,
+      0.0f, 0.5f, 0.0f,
+      0.0f, 0.0f, 0.5f,
+      0.0f, 0.5f, 0.5f,
       0.5f, 0.0f, 0.0f,
       0.0f, 0.5f, 0.0f,
       0.0f, 0.0f, 0.5f,
@@ -28,63 +36,70 @@ class Game {
     )
     // Each element in this array defines a vertex. The attrs of the vertex are looked up in the
     // previous matrices
-    val indices = Array(0, 1, 3, 3, 1, 2)
+    val indices = Array(
+      0, 1, 3, 3, 1, 2, // front
+      4, 0, 3, 5, 4, 3, // top
+      3, 2, 7, 5, 3, 7, // right
+      0, 1, 6, 4, 0, 6, // left
+      6, 1, 2, 7, 6, 2, // bottom
+      4, 6, 7, 5, 4, 7  // back
+    )
     val mesh = new Mesh(positions, colors, indices)
-    val square = new GameObject(mesh)
-    square.position.z = -1.0f
-    square
+    val cube = new GameObject(mesh)
+    cube.position.z = -2.0f
+    cube
   }
-  private val gameObjects = Array(square)
+  private val gameObjects = Array(ball)
 
   def update(window: Window, interval: Float): Unit = {
     // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
-      square.position.y += 0.01f
+      ball.position.y += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_A)) {
-      square.position.x -= 0.01f
+      ball.position.x -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_S)) {
-      square.position.y -= 0.01f
+      ball.position.y -= 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_D)) {
-      square.position.x += 0.01f
+      ball.position.x += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_Q)) {
-      square.position.z += 0.01f
+      ball.position.z += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_E)) {
-      square.position.z -= 0.01f
+      ball.position.z -= 0.01f
     }
     // Rotation
     if (window.isKeyPressed(GLFW_KEY_I)) {
-      square.rotation.x += 1.0f
+      ball.rotation.x += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_K)) {
-      square.rotation.x -= 1.0f
+      ball.rotation.x -= 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_J)) {
-      square.rotation.y += 1.0f
+      ball.rotation.y += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_L)) {
-      square.rotation.y -= 1.0f
+      ball.rotation.y -= 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_U)) {
-      square.rotation.z += 1.0f
+      ball.rotation.z += 1.0f
     }
     if (window.isKeyPressed(GLFW_KEY_O)) {
-      square.rotation.z -= 1.0f
+      ball.rotation.z -= 1.0f
     }
     // Scale
     if (window.isKeyPressed(GLFW_KEY_R)) {
-      square.scale *= 1.01f
+      ball.scale *= 1.01f
     }
     if (window.isKeyPressed(GLFW_KEY_F)) {
-      square.scale *= 0.99f
+      ball.scale *= 0.99f
     }
     if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-      square.reset()
-      square.position.z = -1.0f
+      ball.reset()
+      ball.position.z = -1.0f
     }
   }
 

@@ -49,6 +49,7 @@ class Window(val title: String, val width: Int, val height: Int) {
 
     GL.createCapabilities()
     glClearColor(0f, 0f, 0f, 0f)
+    glEnable(GL_DEPTH_TEST)
 
     window
   }

@@ -44,9 +44,11 @@ class Renderer {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
   }
 
-  def render(window: Long): Unit = {
+  def render(window: Window, xOffset: Float, yOffset: Float): Unit = {
     clear()
     shaderProgram.bind()
+
+    // TODO translation
 
     // Bind to the VAO
     glBindVertexArray(vaoId)

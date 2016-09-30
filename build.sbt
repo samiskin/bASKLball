@@ -11,6 +11,7 @@ lazy val startOnFirst =
 
 val lwjglVersion = "3.0.0"
 
+val jomlVersion = "1.8.4"
 
 //// Setting up native library extraction ////
 
@@ -66,7 +67,8 @@ libraryDependencies ++= Seq(
   "org.lwjgl"      % "lwjgl"          % lwjglVersion,
   "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-windows",
   "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-linux",
-  "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-osx"
+  "org.lwjgl"      % "lwjgl-platform" % lwjglVersion % "natives" classifier "natives-osx",
+  "org.joml"       % "joml"           % jomlVersion
 )
 
 nativeExtractions <<= (baseDirectory) { base => Seq (

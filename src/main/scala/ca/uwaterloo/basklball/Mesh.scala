@@ -26,9 +26,9 @@ class Mesh(positions: Array[Float], colors: Array[Float], indices: Array[Int]) {
     val posVboId = glGenBuffers()
     val posBuffer = BufferUtils.createFloatBuffer(positions.length)
     posBuffer.put(positions).flip()
-    glBindBuffer(GL_ARRAY_BUFFER, posVboId)
-    glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW)
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0)
+    glBindBuffer(GL_ARRAY_BUFFER, posVboId) // use the pos VBO for the glBufferData()
+    glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW) // create and initialize buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0) // associate the pos VBO with the VAO
 
     // Color VBO
     val colorVboId = glGenBuffers()

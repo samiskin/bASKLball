@@ -21,15 +21,12 @@
 package ca.uwaterloo.basklball
 
 object Main extends App {
-  private val WIDTH  = 800
-  private val HEIGHT = 600
-
   private var window: Window = _
   private var game: Game = _
 
   def run() {
     try {
-      window = new Window("bASKLball", WIDTH, HEIGHT)
+      window = new Window("bASKLball", Game.WIDTH, Game.HEIGHT)
       game = new Game()
 
       loop(window)

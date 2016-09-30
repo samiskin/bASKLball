@@ -1,15 +1,38 @@
 package ca.uwaterloo.basklball
 
-import org.lwjgl.opengl._, GL11._, GL20._
+import org.lwjgl.opengl._
+import GL11._
+import GL20._
+import org.joml.Matrix4f
+import org.lwjgl.BufferUtils
+
+import scala.collection.mutable
 
 class ShaderProgram {
 
   private val programId: Int = glCreateProgram()
-  private var vertexShaderId: Int = _
-  private var fragmentShaderId: Int = _
-
   if (programId == 0) {
     throw new Exception("Could not create Shader")
+  }
+
+  private var vertexShaderId: Int = _
+  private var fragmentShaderId: Int = _
+  private val uniforms = new mutable.HashMap[String, Int]
+
+  // Retrieve the location of a uniform in the shader program
+  def createUniform(uniformName: String): Unit = {
+    val uniformLocation = glGetUniformLocation(programId, uniformName)
+    if (uniformLocation < 0) {
+      throw new Exception("Could not find uniform: " + uniformName)
+    }
+    uniforms.put(uniformName, uniformLocation)
+  }
+
+  // Set a uniform in the shader program
+  def setUniform(uniformName: String, value: Matrix4f): Unit = {
+    val buffer = BufferUtils.createFloatBuffer(16) // since 4x4 matrix
+    value.get(buffer)
+    glUniformMatrix4fv(uniforms(uniformName), false, buffer)
   }
 
   def createVertexShader(shaderCode: String): Unit = {

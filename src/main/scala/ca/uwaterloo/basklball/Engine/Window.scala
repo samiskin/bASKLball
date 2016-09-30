@@ -1,8 +1,10 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Engine
 
-import org.lwjgl._, glfw._, opengl._
-import Callbacks._, GLFW._, GL11._
-
+import org.lwjgl.glfw.Callbacks._
+import org.lwjgl.glfw.GLFW._
+import org.lwjgl.glfw._
+import org.lwjgl.opengl.GL11._
+import org.lwjgl.opengl._
 import org.lwjgl.system.MemoryUtil._
 
 class Window(val title: String, val width: Int, val height: Int) {

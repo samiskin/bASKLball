@@ -14,27 +14,9 @@
  * limitations under the License.
  ******************************************************************************/
 
- package ca.uwaterloo.basklball
+ package ca.uwaterloo.basklball.Engine
 
-import org.lwjgl.glfw.{
-  GLFWCharCallbackI,
-  GLFWCharModsCallbackI,
-  GLFWCursorEnterCallbackI,
-  GLFWCursorPosCallbackI,
-  GLFWDropCallbackI,
-  GLFWErrorCallbackI,
-  GLFWFramebufferSizeCallbackI,
-  GLFWKeyCallbackI,
-  GLFWMonitorCallbackI,
-  GLFWMouseButtonCallbackI,
-  GLFWScrollCallbackI,
-  GLFWWindowCloseCallbackI,
-  GLFWWindowFocusCallbackI,
-  GLFWWindowIconifyCallbackI,
-  GLFWWindowPosCallbackI,
-  GLFWWindowRefreshCallbackI,
-  GLFWWindowSizeCallbackI
-}
+import org.lwjgl.glfw._
 
 object CallbackHelpers {
   import scala.language.implicitConversions

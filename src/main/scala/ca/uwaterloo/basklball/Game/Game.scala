@@ -1,5 +1,6 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Game
 
+import ca.uwaterloo.basklball.Engine._
 import org.lwjgl.glfw.GLFW._
 
 object Game {

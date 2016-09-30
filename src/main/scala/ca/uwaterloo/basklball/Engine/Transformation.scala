@@ -1,6 +1,6 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Engine
 
-import org.joml.{Matrix4f}
+import org.joml.Matrix4f
 
 object Transformation {
   def toRad(degree: Float) = Math.toRadians(degree.toDouble).toFloat

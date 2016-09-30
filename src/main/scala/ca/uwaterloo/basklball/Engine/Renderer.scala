@@ -1,7 +1,6 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Engine
 
-import org.lwjgl.opengl._
-import GL11._
+import org.lwjgl.opengl.GL11._
 
 class Renderer {
   private val FOV = Math.toRadians(60.0f).toFloat

@@ -1,10 +1,9 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Engine
 
-import org.lwjgl.opengl._
-import GL11._
-import GL20._
 import org.joml.Matrix4f
 import org.lwjgl.BufferUtils
+import org.lwjgl.opengl.GL11._
+import org.lwjgl.opengl.GL20._
 
 import scala.collection.mutable
 

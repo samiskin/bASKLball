@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball
+package ca.uwaterloo.basklball.Engine
 
 import scala.io.Source
 

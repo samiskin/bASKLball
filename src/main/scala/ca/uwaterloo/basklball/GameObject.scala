@@ -9,4 +9,14 @@ class GameObject(val mesh: Mesh) {
 
   def scale = _scale
   def scale_=(scale: Float) { _scale = scale }
+
+  def reset(): Unit = {
+    position.x = 0.0f
+    position.y = 0.0f
+    position.z = 0.0f
+    rotation.x = 0.0f
+    rotation.y = 0.0f
+    rotation.z = 0.0f
+    scale = 1.0f
+  }
 }

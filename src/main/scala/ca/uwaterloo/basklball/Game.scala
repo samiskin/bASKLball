@@ -14,10 +14,10 @@ class Game {
   private val square = {
     // x,y,z coordinates
     val positions = Array(
-      -0.5f,  0.5f, -1.0f,
-      -0.5f, -0.5f, -2.0f,
-      0.5f, -0.5f, -3.0f,
-      0.5f,  0.5f, -1.0f
+      -0.5f,  0.5f, 0.0f,
+      -0.5f, -0.5f, 0.0f,
+      0.5f, -0.5f, 0.0f,
+      0.5f,  0.5f, 0.0f
     )
     // color corresponding to points in positions
     val colors = Array(
@@ -30,11 +30,14 @@ class Game {
     // previous matrices
     val indices = Array(0, 1, 3, 3, 1, 2)
     val mesh = new Mesh(positions, colors, indices)
-    new GameObject(mesh)
+    val square = new GameObject(mesh)
+    square.position.z = -1.0f
+    square
   }
   private val gameObjects = Array(square)
 
   def update(window: Window, interval: Float): Unit = {
+    // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
       square.position.y += 0.01f
     }
@@ -48,16 +51,40 @@ class Game {
       square.position.x += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_Q)) {
-      square.rotation.z += 1.0f
+      square.position.z += 0.01f
     }
     if (window.isKeyPressed(GLFW_KEY_E)) {
+      square.position.z -= 0.01f
+    }
+    // Rotation
+    if (window.isKeyPressed(GLFW_KEY_I)) {
+      square.rotation.x += 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_K)) {
+      square.rotation.x -= 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_J)) {
+      square.rotation.y += 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_L)) {
+      square.rotation.y -= 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_U)) {
+      square.rotation.z += 1.0f
+    }
+    if (window.isKeyPressed(GLFW_KEY_O)) {
       square.rotation.z -= 1.0f
     }
+    // Scale
     if (window.isKeyPressed(GLFW_KEY_R)) {
-      square.scale *= 1.02f
+      square.scale *= 1.01f
     }
     if (window.isKeyPressed(GLFW_KEY_F)) {
-      square.scale *= 0.98f
+      square.scale *= 0.99f
+    }
+    if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+      square.reset()
+      square.position.z = -1.0f
     }
   }
 

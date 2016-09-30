@@ -19,13 +19,16 @@ class Renderer {
 
     // TODO translation
 
-    // Draw the mesh
+    // positions, colors, indices, etc are included in the VAO
     glBindVertexArray(mesh.vaoId)
-    glEnableVertexAttribArray(0)
+    glEnableVertexAttribArray(0) // enable positions
+    glEnableVertexAttribArray(1) // enable colors
+
     glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0)
 
     // Restore state
     glDisableVertexAttribArray(0)
+    glDisableVertexAttribArray(1)
     glBindVertexArray(0)
 
     shaderProgram.unbind()

@@ -10,8 +10,14 @@ class Game {
        0.5f, -0.5f, 0.0f,
        0.5f,  0.5f, 0.0f
     )
+    val colors = Array(
+      0.5f, 0.0f, 0.0f,
+      0.0f, 0.5f, 0.0f,
+      0.0f, 0.0f, 0.5f,
+      0.0f, 0.5f, 0.5f
+    )
     val indices = Array(0, 1, 3, 3, 1, 2)
-    new Mesh(positions, indices)
+    new Mesh(positions, colors, indices)
   }
   private val renderer = new Renderer()
 

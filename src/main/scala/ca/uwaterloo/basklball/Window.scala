@@ -1,4 +1,4 @@
-package com.example
+package ca.uwaterloo.basklball
 
 import org.lwjgl._, glfw._, opengl._
 import Callbacks._, GLFW._, GL11._

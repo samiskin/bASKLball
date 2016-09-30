@@ -1,4 +1,4 @@
-package com.example
+package ca.uwaterloo.basklball
 
 import scala.io.Source
 

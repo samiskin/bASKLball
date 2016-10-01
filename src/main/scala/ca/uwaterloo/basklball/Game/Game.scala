@@ -13,44 +13,10 @@ class Game {
   private val gameState = new GameState()
 
   private val cubeMesh = {
-    // x,y,z coordinates
-    val positions = Array(
-      -0.5f,  0.5f,  0.5f,
-      -0.5f, -0.5f,  0.5f,
-      0.5f, -0.5f,  0.5f,
-      0.5f,  0.5f,  0.5f,
-      -0.5f,  0.5f, -0.5f,
-      0.5f,  0.5f, -0.5f,
-      -0.5f, -0.5f, -0.5f,
-      0.5f, -0.5f, -0.5f,
-      -0.5f, -0.5f, -0.5f, // repeat vertices for proper texture
-      0.5f, -0.5f, -0.5f
-    )
-    // corresponds to points in positions
-    val textureCoordinates = Array(
-      0.0f, 0.0f, // 0
-      0.0f, 2.0f, // 1
-      2.0f, 2.0f, // 2
-      2.0f, 0.0f, // 3
-      0.0f, 2.0f, // 4
-      0.0f, 0.0f, // 2
-      2.0f, 2.0f, // 6
-      0.0f, 2.0f, // 7
-      0.0f, 0.0f, // 8
-      2.0f, 0.0f  // 9
-    )
-    // Each element in this array defines a vertex. The attrs of the vertex are looked up in the
-    // previous matrices
-    val indices = Array(
-      0, 1, 3, 3, 1, 2, // front
-      4, 0, 3, 5, 4, 3, // top
-      3, 2, 7, 5, 3, 7, // right
-      0, 1, 6, 4, 0, 6, // left
-      8, 1, 2, 9, 8, 2, // bottom
-      4, 8, 9, 5, 4, 9  // back
-    )
-    val texture = new Texture("/textures/basketball512.png")
-    new Mesh(positions, textureCoordinates, indices, texture)
+    val texture = new Texture("/textures/metal.png")
+    val mesh = OBJLoader.loadMesh("/models/blender-cube.obj")
+    mesh.texture = texture;
+    mesh
   }
 
   // A cube despite the name

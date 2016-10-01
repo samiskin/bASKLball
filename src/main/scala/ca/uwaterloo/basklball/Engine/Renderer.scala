@@ -14,6 +14,8 @@ class Renderer {
   shaderProgram.createUniform("projectionMatrix")
   shaderProgram.createUniform("modelViewMatrix")
   shaderProgram.createUniform("texture_sampler")
+  shaderProgram.createUniform("colour")
+  shaderProgram.createUniform("useColour")
 
   private val transformation = new Transformation
 
@@ -34,11 +36,14 @@ class Renderer {
     val viewMatrix = transformation.viewMatrix(camera)
 
     for (gameObject <- gameObjects) {
+      val mesh = gameObject.mesh;
       val modelViewMatrix =
         transformation.modelViewMatrix(gameObject, viewMatrix)
       shaderProgram.setUniform("modelViewMatrix", modelViewMatrix)
+      shaderProgram.setUniform("colour", mesh.colour)
+      shaderProgram.setUniform("useColour", if (mesh.texture != null) 0 else 1)
 
-      gameObject.mesh.render()
+      mesh.render()
     }
 
     shaderProgram.unbind()

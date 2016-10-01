@@ -1,5 +1,6 @@
 package ca.uwaterloo.basklball.Engine
 
+import org.joml.Vector3f
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL13._
@@ -9,10 +10,19 @@ import org.lwjgl.opengl.GL30._
 
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh(positions: Array[Float],
-           textureCoordinates: Array[Float],
-           indices: Array[Int],
-           val texture: Texture) {
+object Mesh {
+  var DEFAULT_COLOUR = new Vector3f(1.0f, 1.0f, 1.0f)
+}
+
+class Mesh(var positions: Array[Float],
+           var textureCoordinates: Array[Float],
+           var normals: Array[Float],
+           var indices: Array[Int],
+           var colour: Vector3f = Mesh.DEFAULT_COLOUR,
+           var texture: Texture = null
+           ) {
+
+
   val vertexCount = indices.length
 
   // vaoId is the ID of a Vertex Array Object. A VAO is an object containing one or more VBOs
@@ -54,6 +64,15 @@ class Mesh(positions: Array[Float],
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW)
     vboIds += idxVboId
 
+    // Vertex normals VBO
+    val vecNormVboId = glGenBuffers()
+    val vecNormalsBuffer = BufferUtils.createFloatBuffer(normals.length)
+    vecNormalsBuffer.put(normals).flip()
+    glBindBuffer(GL_ARRAY_BUFFER, vecNormVboId)
+    glBufferData(GL_ARRAY_BUFFER, vecNormalsBuffer, GL_STATIC_DRAW)
+    glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+    vboIds += vecNormVboId
+
     glBindBuffer(GL_ARRAY_BUFFER, 0)
     glBindVertexArray(0)
 
@@ -62,20 +81,25 @@ class Mesh(positions: Array[Float],
 
   def render(): Unit = {
     // Activate first texture bank
-    glActiveTexture(GL_TEXTURE0)
-    glBindTexture(GL_TEXTURE_2D, texture.id)
+    if (texture != null) {
+      glActiveTexture(GL_TEXTURE0)
+      glBindTexture(GL_TEXTURE_2D, texture.id)
+    }
 
     // positions, colors, indices, etc are included in the VAO
     glBindVertexArray(vaoId)
     glEnableVertexAttribArray(0) // enable positions
     glEnableVertexAttribArray(1) // enable colors
+    glEnableVertexAttribArray(2) // enable norms
 
     glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0)
 
     // Restore state
     glDisableVertexAttribArray(0)
     glDisableVertexAttribArray(1)
+    glDisableVertexAttribArray(2)
     glBindVertexArray(0)
+    glBindTexture(GL_TEXTURE_2D, 0)
   }
 
   def cleanup(): Unit = {
@@ -87,7 +111,8 @@ class Mesh(positions: Array[Float],
       glDeleteBuffers(vboId)
     }
 
-    texture.cleanup()
+    if (texture != null)
+      texture.cleanup()
 
     glBindVertexArray(0)
     glDeleteVertexArrays(vaoId)

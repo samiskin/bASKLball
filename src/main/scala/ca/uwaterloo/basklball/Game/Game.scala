@@ -54,29 +54,26 @@ class Game {
   }
 
   // A cube despite the name
-  private val ball = {
-    val ball = new GameObject(cubeMesh)
-    ball.position.z = -2.0f
-    ball
-  }
+  private val ball = new GameObject(cubeMesh)
 
   private val gameObjects = {
-    val ball2 = new GameObject(cubeMesh)
-    ball2.position.z = -1.0f
-    ball2.position.x = 0.7f
-    ball2.scale = 0.5f
-    val ball3 = new GameObject(cubeMesh)
-    ball3.position.z = -1.0f
-    ball3.position.x = -0.7f
-    ball3.scale = 0.5f
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
-    Array(ball, ball2, ball3, skybox)
+    Array(ball, skybox)
   }
 
-  private val camera = new Camera()
+  private val camera = {
+    val camera = new Camera()
+    camera.position.z = 2f
+    camera
+  }
 
   def update(window: Window, interval: Float): Unit = {
+    gameState.update(interval, false, false, false, false)
+    ball.position.y = gameState.ballPosition.x
+    ball.position.z = -gameState.ballPosition.y
+    ball.rotation.x = gameState.ballPosition.z
+    /*
     val (position, rotation) = {
       if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT))
         (camera.position, camera.rotation)
@@ -136,6 +133,7 @@ class Game {
       camera.position.zero()
       camera.rotation.zero()
     }
+    */
   }
 
   def render(window: Window): Unit = {

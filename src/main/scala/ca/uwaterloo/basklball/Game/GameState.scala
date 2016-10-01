@@ -1,57 +1,91 @@
 package ca.uwaterloo.basklball.Game
 
+import org.joml.Vector3f
+
 /**
   * Created by sam on 2016-09-30.
   */
 object GameState {
-  val BALL_RADIUS = 1f
-  val FINGER_LENGTH = BALL_RADIUS/2
-  val PALM_LENGTH = BALL_RADIUS/2
+  val BALL_RADIUS = 0.5f
+  val FINGER_LENGTH = BALL_RADIUS/2f
+  val PALM_LENGTH = BALL_RADIUS/2f
   val FOREARM_LENGTH = BALL_RADIUS
-  val UPPERARM_LENGTH = BALL_RADIUS*1.2
+  val UPPERARM_LENGTH = BALL_RADIUS*1.2f
 }
 
 class GameState {
-  // All vectors are y,z,pitch co-ordinates. This game takes place on a 2d plan going away from the camera. Thus,
-  // all positions are away from the camera, and in the y,z plane. There is no way to add x (yaw) or y (roll) rotation,
-  // only pitch (aka top/backspin on the ball).
+  // All vectors are y,z,pitch co-ordinates, NOT x,y,z. Vector3f is used for convenience over tuples, which are useless.
+  // This game takes place on a 2f plan going away from the camera. Thus, all positions are away from the camera, and in
+  // the y,z plane. There is no way to add x (yaw) or y (roll) rotation, only pitch (aka top/backspin on the ball).
 
   // Up is positive, down is negative. Thus, rotations "to the ground" are negative, and rotations "to the face" are
   // positive.
 
-  // The joints are referenced from their connection to the body. So, fingersPosition == the position of the knuckle
+  // The joints are referenced from their connection to the body. So, fingersPosition == the position of the knuckle.
+  // The shoulder joint is the reference point of y = 0, z = 0.
   // Angles for joints are zeroed at the position of reaching as high as possible.
-  private var _upperarmPosition = (0f, 0f, 0f)
+  private var _upperarmPosition = new Vector3f(0f)
   def upperarmPosition = _upperarmPosition
-  private var _upperarmVelocity = (0f, 0f, 0f)
+  private var _upperarmRotationVelocity = 0f
   private val _maxUpperarmAngle = 0f; // shoulder, when as straight as can be, is as much as it bends in that direction
   private val _minUpperarmAngle = -270f; // shoulder can do about 3/4 of a full rotation
 
-  private var _forearmPosition = (0f, _upperarmPosition._2 + GameState.UPPERARM_LENGTH, 135f)
+  private var _forearmPosition = new Vector3f(0f, _upperarmPosition.y + GameState.UPPERARM_LENGTH, 135f)
   def forearmPosition = _forearmPosition
-  private var _forearmVelocity = (0f, 0f, 0f)
+  private var _forearmRotationVelocity = 0f
   private val _maxForearmAngle = 140f; // elbow can bend towards you somewhat close to 180
   private val _minForearmAngle = 0f; // elbow can't bend past straight
 
-  private var _palmPosition = (_forearmPosition._1 + GameState.FOREARM_LENGTH * Math.sin(_forearmPosition._3),
-                               _forearmPosition._2 + GameState.FOREARM_LENGTH * Math.cos(_forearmPosition._3),
-                               45f)
+  private var _palmPosition =
+    new Vector3f(_forearmPosition.x + GameState.FOREARM_LENGTH * Math.sin(_forearmPosition.z).toFloat,
+                 _forearmPosition.y + GameState.FOREARM_LENGTH * Math.cos(_forearmPosition.z).toFloat,
+                 45f)
   def palmPosition = _palmPosition
-  private var _palmVelocity = (0f, 0f, 0f)
+  private var _palmRotationVelocity = 0f
   private val _maxPalmAngle = 90f; // wrist can bend back 90 deg
   private val _minPalmAngle = -90f; // wrist can bend forward 90 deg
 
-  private var _fingerPosition = (_palmPosition._1, _palmPosition._2 - GameState.PALM_LENGTH, 30f)
+  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y - GameState.PALM_LENGTH, 30f)
   def fingerPosition = _fingerPosition
-  private var _fingerVelocity = (0f, 0f, 0f)
+  private var _fingerRotationVelocity = 0f
   private val _maxFingerAngle = 80f; // fingers can't quite bend back to 90 deg
   private val _minFingerAngle = -100f; // fingers can only bend forward slightly past 90 relative to the hand
 
 
   // The ball is referenced from its center.
-  private var _ballPosition = (_fingerPosition._1 + GameState.BALL_RADIUS,
-                               (_fingerPosition._2 + _palmPosition._2)/2f,
-                               0f)
+  private var _ballPosition = new Vector3f(_fingerPosition.x + GameState.BALL_RADIUS,
+                                           (_fingerPosition.y + _palmPosition.y)/2f,
+                                           0f)
   def ballPosition = _ballPosition
-  private var _ballVelocity = (0f, 0f, 0f)
+  private var _ballVelocity = new Vector3f(0f, 0f, 0f)
+
+  // Game should stay frozen until a key is pressed
+  private var _anyPressedYet = false
+
+  // Update state of game
+  // Needs time passed in s, as well as whether we are sending "power" to each joint
+  def update(timePassed: Float, fingerJoint: Boolean, palmJoint: Boolean, forearmJoint: Boolean,
+             upperarmJoint: Boolean): Unit = {
+    _anyPressedYet = _anyPressedYet || fingerJoint || palmJoint || forearmJoint || upperarmJoint
+    if (_anyPressedYet) {
+      if (fingerJoint) _fingerRotationVelocity += 0.01f
+      if (palmJoint) _palmRotationVelocity += 0.01f
+      if (forearmJoint) _forearmRotationVelocity += 0.01f
+      if (upperarmJoint) _upperarmRotationVelocity += 0.01f
+
+      _upperarmPosition.z += _upperarmRotationVelocity * timePassed
+      if (_upperarmPosition.z > _maxUpperarmAngle) { _upperarmPosition.z = _maxUpperarmAngle; _upperarmRotationVelocity = 0 }
+      if (_upperarmPosition.z < _minUpperarmAngle) { _upperarmPosition.z = _minUpperarmAngle; _upperarmRotationVelocity = 0 }
+      _forearmPosition.z += _forearmRotationVelocity * timePassed
+      if (_forearmPosition.z > _maxUpperarmAngle) { _forearmPosition.z = _maxUpperarmAngle; _forearmRotationVelocity = 0 }
+      if (_forearmPosition.z < _minUpperarmAngle) { _forearmPosition.z = _minUpperarmAngle; _forearmRotationVelocity = 0 }
+      _palmPosition.z += _palmRotationVelocity * timePassed
+      if (_palmPosition.z > _maxUpperarmAngle) { _palmPosition.z = _maxUpperarmAngle; _palmRotationVelocity = 0 }
+      if (_palmPosition.z < _minUpperarmAngle) { _palmPosition.z = _minUpperarmAngle; _palmRotationVelocity = 0 }
+      _fingerPosition.z += _fingerRotationVelocity * timePassed
+      if (_fingerPosition.z > _maxUpperarmAngle) { _fingerPosition.z = _maxUpperarmAngle; _fingerRotationVelocity = 0 }
+      if (_fingerPosition.z < _minUpperarmAngle) { _fingerPosition.z = _minUpperarmAngle; _fingerRotationVelocity = 0 }
+      _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
+    }
+  }
 }

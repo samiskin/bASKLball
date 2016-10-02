@@ -103,9 +103,10 @@ object Skybox {
 
     val texture = new Texture(path)
 
-    new Mesh(positions, textureCoordinates, indices, texture)
+    new Mesh(positions, textureCoordinates, Array(), indices, texture = texture)
   }
 }
+
 
 class Skybox(path: String) extends GameObject(mesh = Skybox.makeMesh(path)) {
 }

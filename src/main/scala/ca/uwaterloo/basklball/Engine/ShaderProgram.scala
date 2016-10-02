@@ -1,6 +1,6 @@
 package ca.uwaterloo.basklball.Engine
 
-import org.joml.Matrix4f
+import org.joml.{Matrix4f, Vector3f}
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
@@ -36,6 +36,10 @@ class ShaderProgram {
 
   def setUniform(uniformName: String, value: Int): Unit = {
     glUniform1i(uniforms(uniformName), value)
+  }
+
+  def setUniform(uniformName: String, value: Vector3f): Unit = {
+    glUniform3f(uniforms(uniformName), value.x, value.y, value.z)
   }
 
   def createVertexShader(shaderCode: String): Unit = {

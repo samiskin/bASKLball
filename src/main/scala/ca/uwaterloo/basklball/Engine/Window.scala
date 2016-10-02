@@ -53,6 +53,9 @@ class Window(val title: String, val width: Int, val height: Int) {
     glClearColor(0f, 0f, 0f, 0f)
     glEnable(GL_DEPTH_TEST)
 
+    // Enable to show wireframe
+//     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+
     window
   }
 

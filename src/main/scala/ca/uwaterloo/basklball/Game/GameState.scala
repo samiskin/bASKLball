@@ -79,14 +79,14 @@ class GameState {
       if (_upperarmPosition.z > _maxUpperarmAngle) { _upperarmPosition.z = _maxUpperarmAngle; _upperarmRotationVelocity = 0 }
       if (_upperarmPosition.z < _minUpperarmAngle) { _upperarmPosition.z = _minUpperarmAngle; _upperarmRotationVelocity = 0 }
       _forearmPosition.z += _forearmRotationVelocity * timePassed
-      if (_forearmPosition.z > _maxUpperarmAngle) { _forearmPosition.z = _maxUpperarmAngle; _forearmRotationVelocity = 0 }
-      if (_forearmPosition.z < _minUpperarmAngle) { _forearmPosition.z = _minUpperarmAngle; _forearmRotationVelocity = 0 }
+      if (_forearmPosition.z > _maxForearmAngle) { _forearmPosition.z = _maxForearmAngle; _forearmRotationVelocity = 0 }
+      if (_forearmPosition.z < _minForearmAngle) { _forearmPosition.z = _minForearmAngle; _forearmRotationVelocity = 0 }
       _palmPosition.z += _palmRotationVelocity * timePassed
-      if (_palmPosition.z > _maxUpperarmAngle) { _palmPosition.z = _maxUpperarmAngle; _palmRotationVelocity = 0 }
-      if (_palmPosition.z < _minUpperarmAngle) { _palmPosition.z = _minUpperarmAngle; _palmRotationVelocity = 0 }
+      if (_palmPosition.z > _maxPalmAngle) { _palmPosition.z = _maxPalmAngle; _palmRotationVelocity = 0 }
+      if (_palmPosition.z < _minPalmAngle) { _palmPosition.z = _minPalmAngle; _palmRotationVelocity = 0 }
       _fingerPosition.z += _fingerRotationVelocity * timePassed
-      if (_fingerPosition.z > _maxUpperarmAngle) { _fingerPosition.z = _maxUpperarmAngle; _fingerRotationVelocity = 0 }
-      if (_fingerPosition.z < _minUpperarmAngle) { _fingerPosition.z = _minUpperarmAngle; _fingerRotationVelocity = 0 }
+      if (_fingerPosition.z > _maxFingerAngle) { _fingerPosition.z = _maxFingerAngle; _fingerRotationVelocity = 0 }
+      if (_fingerPosition.z < _minFingerAngle) { _fingerPosition.z = _minFingerAngle; _fingerRotationVelocity = 0 }
 
       // Updating joint positions
       var currentAngle = -_upperarmPosition.z
@@ -98,6 +98,7 @@ class GameState {
       currentAngle += palmPosition.z
       _fingerPosition.x = GameState.PALM_LENGTH * Math.cos(currentAngle).toFloat + _palmPosition.x
       _fingerPosition.y = GameState.PALM_LENGTH * Math.sin(currentAngle).toFloat + _palmPosition.y
+
       // Moving ball
       _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
     }

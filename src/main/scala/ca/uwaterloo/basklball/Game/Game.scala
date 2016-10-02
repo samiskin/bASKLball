@@ -21,16 +21,20 @@ class Game {
 
   // A cube despite the name
   private val ball = new GameObject(cubeMesh)
+  private val upperarm = new GameObject(cubeMesh)
+  private val forearm = new GameObject(cubeMesh)
+  private val palm = new GameObject(cubeMesh)
+  private val finger = new GameObject(cubeMesh)
 
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
-    Array(ball, skybox)
+    Array(ball, upperarm, forearm, palm, finger, skybox)
   }
 
   private val camera = {
     val camera = new Camera()
-    camera.position.z = 2f
+    camera.position.z = 5f
     camera
   }
 
@@ -43,6 +47,26 @@ class Game {
     ball.position.y = gameState.ballPosition.x
     ball.position.z = -gameState.ballPosition.y
     ball.rotation.x = gameState.ballPosition.z
+    upperarm.position.y = gameState.upperarmPosition.x
+    upperarm.position.z = -gameState.upperarmPosition.y
+    upperarm.rotation.x = gameState.upperarmPosition.z
+    forearm.position.y = gameState.forearmPosition.x
+    forearm.position.z = -gameState.forearmPosition.y
+    forearm.rotation.x = gameState.forearmPosition.z
+    palm.position.y = gameState.palmPosition.x
+    palm.position.z = -gameState.palmPosition.y
+    palm.rotation.x = gameState.palmPosition.z
+    finger.position.y = gameState.fingerPosition.x
+    finger.position.z = -gameState.fingerPosition.y
+    finger.rotation.x = gameState.fingerPosition.z
+
+    // Camera movements
+    if (window.isKeyPressed(GLFW_KEY_LEFT)) camera.position.x -= 0.01f
+    if (window.isKeyPressed(GLFW_KEY_RIGHT)) camera.position.x += 0.01f
+    if (window.isKeyPressed(GLFW_KEY_UP)) camera.position.z -= 0.01f
+    if (window.isKeyPressed(GLFW_KEY_DOWN)) camera.position.z += 0.01f
+    if (window.isKeyPressed(GLFW_KEY_9)) camera.rotation.y -= 1f
+    if (window.isKeyPressed(GLFW_KEY_0)) camera.rotation.y += 1f
     /*
     val (position, rotation) = {
       if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT))

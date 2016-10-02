@@ -12,24 +12,21 @@ class Game {
   private val renderer = new Renderer()
   private val gameState = new GameState()
 
-  private val cubeMesh = {
-    val texture = new Texture("/textures/metal.png")
-    val mesh = OBJLoader.loadMesh("/models/blender-cube.obj")
-    mesh.texture = texture;
-    mesh
-  }
+  private val cubeMesh = OBJLoader.loadMesh("/models/metal-prism.obj")
+  private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")
 
   // A cube despite the name
-  private val ball = new GameObject(cubeMesh)
-  private val upperarm = new GameObject(cubeMesh)
-  private val forearm = new GameObject(cubeMesh)
-  private val palm = new GameObject(cubeMesh)
-  private val finger = new GameObject(cubeMesh)
+  private val ball = new GameObject(sphereMesh)
+  private val upperarm = new GameObject(cubeMesh, scale=GameState.UPPERARM_LENGTH)
+  private val forearm = new GameObject(cubeMesh, scale=GameState.FOREARM_LENGTH)
+  private val palm = new GameObject(cubeMesh, scale=GameState.PALM_LENGTH)
+  private val finger = new GameObject(cubeMesh, scale=GameState.FINGER_LENGTH)
 
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
-    Array(ball, upperarm, forearm, palm, finger, skybox)
+    //Array(ball, upperarm, forearm, palm, finger, skybox) TODO UNCOMMENT
+    Array(upperarm, forearm, palm, finger, skybox)
   }
 
   private val camera = {
@@ -69,10 +66,7 @@ class Game {
     if (window.isKeyPressed(GLFW_KEY_0)) camera.rotation.y += 1f
     /*
     val (position, rotation) = {
-      if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT))
         (camera.position, camera.rotation)
-      else
-        (ball.position, ball.rotation)
     }
     // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -112,22 +106,11 @@ class Game {
     if (window.isKeyPressed(GLFW_KEY_O)) {
       rotation.z -= 1.0f
     }
-    // Scale
-    if (window.isKeyPressed(GLFW_KEY_R)) {
-      ball.scale *= 1.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_F)) {
-      ball.scale *= 0.99f
-    }
     if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-      ball.position.zero()
-      ball.rotation.zero()
-      ball.scale = 1.0f
-      ball.position.z = -2.0f
       camera.position.zero()
       camera.rotation.zero()
     }
-    */
+*/
   }
 
   def render(window: Window): Unit = {

@@ -12,20 +12,20 @@ class Game {
   private val renderer = new Renderer()
   private val gameState = new GameState()
 
-  private val cubeMesh = {
-    val texture = new Texture("/textures/metal.png")
-    val mesh = OBJLoader.loadMesh("/models/blender-cube.obj")
-    mesh.texture = texture;
-    mesh
-  }
+  private val cubeMesh = OBJLoader.loadMesh("/models/metal-prism.obj")
+  private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")
 
   // A cube despite the name
-  private val ball = new GameObject(cubeMesh)
 
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
-    Array(ball, skybox)
+
+//    val upperarm = new GameObject(cubeMesh, scale=0.05f)
+    val upperarmForearmJoint = new GameObject(sphereMesh, scale=0.05f)
+//    val forearm = new GameObject(cubeMesh, scale=0.05f)
+
+    Array(upperarmForearmJoint, skybox)
   }
 
   private val camera = {
@@ -36,15 +36,12 @@ class Game {
 
   def update(window: Window, interval: Float): Unit = {
     gameState.update(interval, false, false, false, false)
-    ball.position.y = gameState.ballPosition.x
-    ball.position.z = -gameState.ballPosition.y
-    ball.rotation.x = gameState.ballPosition.z
-    /*
+//    ball.position.y = gameState.ballPosition.x
+//    ball.position.z = -gameState.ballPosition.y
+//    ball.rotation.x = gameState.ballPosition.z
+
     val (position, rotation) = {
-      if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT))
         (camera.position, camera.rotation)
-      else
-        (ball.position, ball.rotation)
     }
     // Position
     if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -84,22 +81,11 @@ class Game {
     if (window.isKeyPressed(GLFW_KEY_O)) {
       rotation.z -= 1.0f
     }
-    // Scale
-    if (window.isKeyPressed(GLFW_KEY_R)) {
-      ball.scale *= 1.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_F)) {
-      ball.scale *= 0.99f
-    }
     if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-      ball.position.zero()
-      ball.rotation.zero()
-      ball.scale = 1.0f
-      ball.position.z = -2.0f
       camera.position.zero()
       camera.rotation.zero()
     }
-    */
+
   }
 
   def render(window: Window): Unit = {

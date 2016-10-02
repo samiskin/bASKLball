@@ -20,28 +20,30 @@ object OBJLoader {
 
     lines.foreach((line) => {
       val tokens = line.split("\\s+")
-      tokens(0) match {
-        case "v" => {
-          vertices += new Vector3f(
-            tokens(1).toFloat,
-            tokens(2).toFloat,
-            tokens(3).toFloat
-          )
+      if (tokens.length > 0) {
+        tokens(0) match {
+          case "v" => {
+            vertices += new Vector3f(
+              tokens(1).toFloat,
+              tokens(2).toFloat,
+              tokens(3).toFloat
+            )
+          }
+          case "vt" => {
+            textures += new Vector2f(tokens(1).toFloat, tokens(2).toFloat)
+          }
+          case "vn" => {
+            normals += new Vector3f(
+              tokens(1).toFloat,
+              tokens(2).toFloat,
+              tokens(3).toFloat
+            )
+          }
+          case "f" => {
+            faces += new Face(tokens(1), tokens(2), tokens(3))
+          }
+          case _ => {}
         }
-        case "vt" => {
-          textures += new Vector2f(tokens(1).toFloat, tokens(2).toFloat)
-        }
-        case "vn" => {
-          normals += new Vector3f(
-            tokens(1).toFloat,
-            tokens(2).toFloat,
-            tokens(3).toFloat
-          )
-        }
-        case "f" => {
-          faces += new Face(tokens(1), tokens(2), tokens(3))
-        }
-        case _ => {}
       }
     })
 
@@ -54,7 +56,6 @@ object OBJLoader {
     val indices = new Array[Int](faceList.length * 3)
     var i = 0
     faceList.flatMap(f => f.idxGroups).foreach(idxGroup => {
-      println(idxGroup.toString());
       if (idxGroup.idxTextCoord >= 0)
         textCoordArr(idxGroup.idxPos) = textCoordList(idxGroup.idxTextCoord)
       if (idxGroup.idxVecNormal >= 0)

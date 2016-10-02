@@ -17,7 +17,7 @@ class Game {
 
   // A cube despite the name
   private val ball = new GameObject(sphereMesh)
-  private val upperarm = new GameObject(cubeMesh, scale=GameState.UPPERARM_LENGTH)
+  private val upperarm = new GameObject(cubeMesh, scale=GameState.UPPERARM_LENGTH/4.121909f)
   private val forearm = new GameObject(cubeMesh, scale=GameState.FOREARM_LENGTH)
   private val palm = new GameObject(cubeMesh, scale=GameState.PALM_LENGTH)
   private val finger = new GameObject(cubeMesh, scale=GameState.FINGER_LENGTH)
@@ -26,7 +26,7 @@ class Game {
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
     //Array(ball, upperarm, forearm, palm, finger, skybox) TODO UNCOMMENT
-    Array(upperarm, forearm, palm, finger, skybox)
+    Array(upperarm, skybox)
   }
 
   private val camera = {
@@ -35,7 +35,20 @@ class Game {
     camera
   }
 
+  // Transfers "joint based" gamestate to drawable "center based"
+  def setPosition(y: Float, z: Float, rot: Float, len:Float): (Float, Float) = {
+    val newy = len/2f * Math.cos(rot).toFloat + y
+    val newz = len/2f * Math.sin(rot).toFloat + z
+    (newy,newz)
+  }
+
   def update(window: Window, interval: Long): Unit = {
+    if (window.isKeyPressed(GLFW_KEY_RIGHT)) camera.position.x += 0.01f
+    if (window.isKeyPressed(GLFW_KEY_UP)) camera.position.z -= 0.01f
+    if (window.isKeyPressed(GLFW_KEY_DOWN)) camera.position.z += 0.01f
+    if (window.isKeyPressed(GLFW_KEY_9)) camera.rotation.y -= 1f
+    if (window.isKeyPressed(GLFW_KEY_0)) camera.rotation.y += 1f
+
     gameState.update(interval,
                      fingerJoint = window.isKeyPressed(GLFW_KEY_A),
                      palmJoint = window.isKeyPressed(GLFW_KEY_S),
@@ -44,26 +57,23 @@ class Game {
     ball.position.y = gameState.ballPosition.x
     ball.position.z = -gameState.ballPosition.y
     ball.rotation.x = gameState.ballPosition.z
+
     upperarm.position.y = gameState.upperarmPosition.x
     upperarm.position.z = -gameState.upperarmPosition.y
-    upperarm.rotation.x = gameState.upperarmPosition.z
+    upperarm.rotation.x = gameState.upperarmNetAngle
+
     forearm.position.y = gameState.forearmPosition.x
     forearm.position.z = -gameState.forearmPosition.y
-    forearm.rotation.x = gameState.forearmPosition.z
+    forearm.rotation.x = gameState.forearmNetAngle
+
     palm.position.y = gameState.palmPosition.x
     palm.position.z = -gameState.palmPosition.y
-    palm.rotation.x = gameState.palmPosition.z
+    palm.rotation.x = gameState.palmNetAngle
+
     finger.position.y = gameState.fingerPosition.x
     finger.position.z = -gameState.fingerPosition.y
-    finger.rotation.x = gameState.fingerPosition.z
+    finger.rotation.x = gameState.fingerNetAngle
 
-    // Camera movements
-    if (window.isKeyPressed(GLFW_KEY_LEFT)) camera.position.x -= 0.01f
-    if (window.isKeyPressed(GLFW_KEY_RIGHT)) camera.position.x += 0.01f
-    if (window.isKeyPressed(GLFW_KEY_UP)) camera.position.z -= 0.01f
-    if (window.isKeyPressed(GLFW_KEY_DOWN)) camera.position.z += 0.01f
-    if (window.isKeyPressed(GLFW_KEY_9)) camera.rotation.y -= 1f
-    if (window.isKeyPressed(GLFW_KEY_0)) camera.rotation.y += 1f
     /*
     val (position, rotation) = {
         (camera.position, camera.rotation)
@@ -110,7 +120,7 @@ class Game {
       camera.position.zero()
       camera.rotation.zero()
     }
-*/
+    */
   }
 
   def render(window: Window): Unit = {

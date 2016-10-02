@@ -49,11 +49,14 @@ object Main extends App {
   }
 
   private def loop(window: Window) {
+    var prevTime = java.lang.System.currentTimeMillis()
     while (!window.shouldClose) {
-      game.update(window, 0.0f) // TODO change interval
+      var currTime = java.lang.System.currentTimeMillis()
+      game.update(window, currTime-prevTime) // TODO change interval
       game.render(window)
 
       window.update()
+      prevTime = currTime;
     }
   }
 

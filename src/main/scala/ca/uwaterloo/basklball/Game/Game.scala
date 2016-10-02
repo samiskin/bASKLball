@@ -68,8 +68,12 @@ class Game {
     camera
   }
 
-  def update(window: Window, interval: Float): Unit = {
-    gameState.update(interval, false, false, false, false)
+  def update(window: Window, interval: Long): Unit = {
+    gameState.update(interval,
+                     fingerJoint = window.isKeyPressed(GLFW_KEY_A),
+                     palmJoint = window.isKeyPressed(GLFW_KEY_S),
+                     forearmJoint = window.isKeyPressed(GLFW_KEY_K),
+                     upperarmJoint = window.isKeyPressed(GLFW_KEY_L))
     ball.position.y = gameState.ballPosition.x
     ball.position.z = -gameState.ballPosition.y
     ball.rotation.x = gameState.ballPosition.z

@@ -64,15 +64,17 @@ class GameState {
 
   // Update state of game
   // Needs time passed in s, as well as whether we are sending "power" to each joint
-  def update(timePassed: Float, fingerJoint: Boolean, palmJoint: Boolean, forearmJoint: Boolean,
+  def update(timePassed: Long, fingerJoint: Boolean, palmJoint: Boolean, forearmJoint: Boolean,
              upperarmJoint: Boolean): Unit = {
     _anyPressedYet = _anyPressedYet || fingerJoint || palmJoint || forearmJoint || upperarmJoint
     if (_anyPressedYet) {
-      if (fingerJoint) _fingerRotationVelocity += 0.01f
-      if (palmJoint) _palmRotationVelocity += 0.01f
-      if (forearmJoint) _forearmRotationVelocity += 0.01f
-      if (upperarmJoint) _upperarmRotationVelocity += 0.01f
+      // Joint rotations
+      if (fingerJoint) _fingerRotationVelocity += 0.0001f
+      if (palmJoint) _palmRotationVelocity += 0.0001f
+      if (forearmJoint) _forearmRotationVelocity += 0.0001f
+      if (upperarmJoint) _upperarmRotationVelocity += 0.0001f
 
+      // Performing rotations
       _upperarmPosition.z += _upperarmRotationVelocity * timePassed
       if (_upperarmPosition.z > _maxUpperarmAngle) { _upperarmPosition.z = _maxUpperarmAngle; _upperarmRotationVelocity = 0 }
       if (_upperarmPosition.z < _minUpperarmAngle) { _upperarmPosition.z = _minUpperarmAngle; _upperarmRotationVelocity = 0 }
@@ -85,6 +87,18 @@ class GameState {
       _fingerPosition.z += _fingerRotationVelocity * timePassed
       if (_fingerPosition.z > _maxUpperarmAngle) { _fingerPosition.z = _maxUpperarmAngle; _fingerRotationVelocity = 0 }
       if (_fingerPosition.z < _minUpperarmAngle) { _fingerPosition.z = _minUpperarmAngle; _fingerRotationVelocity = 0 }
+
+      // Updating joint positions
+      var currentAngle = -_upperarmPosition.z
+      _forearmPosition.x = GameState.UPPERARM_LENGTH * Math.cos(currentAngle).toFloat
+      _forearmPosition.y = GameState.UPPERARM_LENGTH * Math.sin(currentAngle).toFloat
+      currentAngle += forearmPosition.z
+      _palmPosition.x = GameState.FOREARM_LENGTH * Math.cos(currentAngle).toFloat + _forearmPosition.x
+      _palmPosition.y = GameState.FOREARM_LENGTH * Math.sin(currentAngle).toFloat + _forearmPosition.y
+      currentAngle += palmPosition.z
+      _fingerPosition.x = GameState.PALM_LENGTH * Math.cos(currentAngle).toFloat + _palmPosition.x
+      _fingerPosition.y = GameState.PALM_LENGTH * Math.sin(currentAngle).toFloat + _palmPosition.y
+      // Moving ball
       _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
     }
   }

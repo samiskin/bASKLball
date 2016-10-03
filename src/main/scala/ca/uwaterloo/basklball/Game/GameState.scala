@@ -48,7 +48,7 @@ class GameState {
   private val _maxPalmAngle = 90f; // wrist can bend back 90 deg
   private val _minPalmAngle = -90f; // wrist can bend forward 90 deg
 
-  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y + GameState.PALM_LENGTH, -30f)
+  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y + GameState.PALM_LENGTH, -10f)
   def fingerPosition = _fingerPosition
   def fingerNetAngle = _fingerPosition.z + palmNetAngle
   private var _fingerRotationVelocity = 0f
@@ -66,6 +66,12 @@ class GameState {
   // Game should stay frozen until a key is pressed
   private var _anyPressedYet = false
 
+  def distance(p1:(Float, Float), p2:(Float,Float), p0:(Float,Float)): Float = {
+    val distanceToLine = Math.abs((p2._1-p1._1)*(p1._2-p0._2)-(p1._1-p0._1)*(p2._2-p1._2))/Math.sqrt(Math.pow(p2._1-p1._1,2)+Math.pow(p2._2-p1._2,2)).toFloat
+    val distanceToP1 = Math.sqrt(Math.pow(p1._1-p0._1,2) + Math.pow(p1._2-p0._2,2)).toFloat
+    val distanceToP2 = Math.sqrt(Math.pow(p2._1-p0._1,2) + Math.pow(p2._2-p0._2,2)).toFloat
+    Math.max(distanceToLine,Math.max(distanceToP1, distanceToP2))
+  }
   // Update state of game
   // Needs time passed in s, as well as whether we are sending "power" to each joint
   def update(timePassed: Long, fingerJoint: Boolean, palmJoint: Boolean, forearmJoint: Boolean,
@@ -103,8 +109,31 @@ class GameState {
       _palmPosition.y = GameState.FOREARM_LENGTH * Math.sin(Math.toRadians(forearmNetAngle)).toFloat - _forearmPosition.y
       _fingerPosition.x = GameState.PALM_LENGTH * Math.cos(Math.toRadians(palmNetAngle)).toFloat + _palmPosition.x
       _fingerPosition.y = GameState.PALM_LENGTH * Math.sin(Math.toRadians(palmNetAngle)).toFloat + _palmPosition.y
+      val fingertipX = GameState.FINGER_LENGTH * Math.cos(Math.toRadians(fingerNetAngle)).toFloat + _fingerPosition.x
+      val fingertipY = GameState.FINGER_LENGTH * Math.cos(Math.toRadians(fingerNetAngle)).toFloat + _fingerPosition.y
+
+      var ballAccel = new Vector3f(0f)
+      ballAccel.x = -0.00003f
+
+      val distanceFinger = distance((_fingerPosition.x, _fingerPosition.y), (fingertipX, fingertipY), (_ballPosition.x, _ballPosition.y))
+      val distancePalm = distance((_fingerPosition.x, _fingerPosition.y), (_palmPosition.x, _palmPosition.y), (_ballPosition.x, _ballPosition.y))
+
+      if (distanceFinger < GameState.BALL_RADIUS) {
+        ballAccel.x = (GameState.BALL_RADIUS - distanceFinger) * Math.sin(Math.toRadians(fingerNetAngle)).toFloat / timePassed - _ballVelocity.x
+        ballAccel.y = -((GameState.BALL_RADIUS - distanceFinger) * Math.cos(Math.toRadians(fingerNetAngle)).toFloat / timePassed)
+        if (distancePalm < GameState.BALL_RADIUS) {
+          // Moving ball
+          _ballVelocity.add(ballAccel)
+          _ballPosition.add(new Vector3f(_ballVelocity).mul(timePassed))
+        }
+      }
+      if (distancePalm < GameState.BALL_RADIUS) {
+        ballAccel.x = (GameState.BALL_RADIUS-distancePalm)*Math.sin(Math.toRadians(palmNetAngle)).toFloat/timePassed - _ballVelocity.x
+        ballAccel.y = -((GameState.BALL_RADIUS-distancePalm)*Math.cos(Math.toRadians(palmNetAngle)).toFloat/timePassed)
+      }
 
       // Moving ball
+      _ballVelocity.add(ballAccel)
       _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
     }
   }

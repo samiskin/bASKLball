@@ -16,7 +16,7 @@ class Game {
   private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")
 
   // A cube despite the name
-  private val ball = new GameObject(sphereMesh)
+  private val ball = new GameObject(sphereMesh, scale=GameState.BALL_RADIUS)
   private val upperarm = {
     val upperarm = new GameObject(cubeMesh, scale=GameState.UPPERARM_LENGTH)
     //upperarm.rotation.z = 180
@@ -29,8 +29,7 @@ class Game {
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
     skybox.scale = 20.0f
-    //Array(ball, upperarm, forearm, palm, finger, skybox) TODO UNCOMMENT
-    Array(upperarm, forearm, palm, finger, skybox)
+    Array(ball, upperarm, forearm, palm, finger, skybox)
   }
 
   private val camera = {

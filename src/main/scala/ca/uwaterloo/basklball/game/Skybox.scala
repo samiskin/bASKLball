@@ -1,6 +1,6 @@
-package ca.uwaterloo.basklball.Game
+package ca.uwaterloo.basklball.game
 
-import ca.uwaterloo.basklball.Engine.{GameObject, Mesh, Texture}
+import ca.uwaterloo.basklball.engine.{GameObject, Mesh, Texture}
 
 object Skybox {
   def makeMesh(path: String): Mesh = {

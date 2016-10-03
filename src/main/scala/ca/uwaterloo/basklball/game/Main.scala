@@ -18,10 +18,10 @@
  * Inspired by the source code found at: "http://www.lwjgl.org/guide".
  */
 
-package Game
+package ca.uwaterloo.basklball.game
 
-import ca.uwaterloo.basklball.Engine._
-import ca.uwaterloo.basklball.Game._;
+import ca.uwaterloo.basklball.engine._
+import ca.uwaterloo.basklball.game._;
 
 object Main extends App {
   private var window: Window = _

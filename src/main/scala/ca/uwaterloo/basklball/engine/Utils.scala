@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import java.io.{BufferedReader, InputStreamReader}
 

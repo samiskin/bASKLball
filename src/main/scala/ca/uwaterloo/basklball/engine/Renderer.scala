@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import org.lwjgl.opengl.GL11._
 

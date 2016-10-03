@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import org.joml.{Matrix4f, Vector3f}
 import org.lwjgl.BufferUtils

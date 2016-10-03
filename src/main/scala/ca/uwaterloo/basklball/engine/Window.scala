@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import org.lwjgl.glfw.Callbacks._
 import org.lwjgl.glfw.GLFW._

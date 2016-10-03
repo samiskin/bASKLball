@@ -70,7 +70,7 @@ class Mesh(var positions: Array[Float],
     vecNormalsBuffer.put(normals).flip()
     glBindBuffer(GL_ARRAY_BUFFER, vecNormVboId)
     glBufferData(GL_ARRAY_BUFFER, vecNormalsBuffer, GL_STATIC_DRAW)
-    glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+    glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0)
     vboIds += vecNormVboId
 
     glBindBuffer(GL_ARRAY_BUFFER, 0)

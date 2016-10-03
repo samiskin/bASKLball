@@ -20,34 +20,29 @@ object OBJLoader {
 
     lines.foreach((line) => {
       val tokens = line.split("\\s+")
-      if (tokens.length > 0) {
+      if (tokens.nonEmpty) {
         tokens(0) match {
-          case "v" => {
+          case "v" =>
             vertices += new Vector3f(
               tokens(1).toFloat,
               tokens(2).toFloat,
               tokens(3).toFloat
             )
-          }
-          case "vt" => {
+          case "vt" =>
             textures += new Vector2f(tokens(1).toFloat, 1 - tokens(2).toFloat)
-          }
-          case "vn" => {
+          case "vn" =>
             normals += new Vector3f(
               tokens(1).toFloat,
               tokens(2).toFloat,
               tokens(3).toFloat
             )
-          }
-          case "f" => {
+          case "f" =>
             faces += new Face(tokens(1), tokens(2), tokens(3))
-          }
-          case _ => {}
+          case _ =>
         }
       }
     })
-
-    return reorderLists(vertices.toArray, textures.toArray, normals.toArray, faces.toArray)
+    reorderLists(vertices.toArray, textures.toArray, normals.toArray, faces.toArray)
   }
 
   def reorderLists(posList: Array[Vector3f], textCoordList: Array[Vector2f], normList: Array[Vector3f], faceList: Array[Face]): Mesh = {
@@ -61,7 +56,7 @@ object OBJLoader {
       if (idxGroup.idxVecNormal >= 0)
         normArr(idxGroup.idxPos) = normList(idxGroup.idxVecNormal)
       indices(i) = idxGroup.idxPos
-      i = i + 1;
+      i = i + 1
     })
 
     new Mesh(
@@ -97,7 +92,7 @@ object OBJLoader {
         idxGroup.idxVecNormal = lineTokens(2).toInt - 1
       }
     }
-    return idxGroup
+    idxGroup
   }
 
   object IdxGroup { val NO_VALUE: Int = -1 }
@@ -106,7 +101,7 @@ object OBJLoader {
     var idxTextCoord: Int = IdxGroup.NO_VALUE
     var idxVecNormal: Int = IdxGroup.NO_VALUE
 
-    override def toString() = idxPos + "/" + idxTextCoord + "/" + idxVecNormal
+    override def toString = idxPos + "/" + idxTextCoord + "/" + idxVecNormal
   }
 
 }

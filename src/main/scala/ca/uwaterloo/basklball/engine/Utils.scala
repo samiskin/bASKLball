@@ -12,6 +12,6 @@ object Utils {
   }
 
   def readAllLines(resource: String): Array[String] = {
-    return loadResources(resource).split('\n')
+    loadResources(resource).split('\n')
   }
 }

@@ -68,7 +68,7 @@ class Game {
       if (window.isKeyPressed(GLFW_KEY_U)) rotation.z += 1.0f
       if (window.isKeyPressed(GLFW_KEY_O)) rotation.z -= 1.0f
       if (window.isKeyPressed(GLFW_KEY_SPACE)) { position.zero(); rotation.zero() }
-      return;
+      return
     }
 
     if (window.isKeyPressed(GLFW_KEY_ENTER)) gameState = new GameState()

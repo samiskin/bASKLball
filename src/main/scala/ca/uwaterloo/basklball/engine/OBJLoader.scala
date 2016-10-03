@@ -13,10 +13,10 @@ object Face {}
 object OBJLoader {
   def loadMesh(fileName: String): Mesh = {
     val lines = Utils.readAllLines(fileName)
-    var vertices = new ArrayBuffer[Vector3f]()
-    var textures = new ArrayBuffer[Vector2f]()
-    var normals = new ArrayBuffer[Vector3f]()
-    var faces = new ArrayBuffer[Face]()
+    val vertices = new ArrayBuffer[Vector3f]()
+    val textures = new ArrayBuffer[Vector2f]()
+    val normals = new ArrayBuffer[Vector3f]()
+    val faces = new ArrayBuffer[Face]()
 
     lines.foreach((line) => {
       val tokens = line.split("\\s+")
@@ -49,15 +49,15 @@ object OBJLoader {
     val textCoordArr = new Array[Vector2f](posList.length)
     val normArr = new Array[Vector3f](posList.length)
     val indices = new Array[Int](faceList.length * 3)
-    var i = 0
-    faceList.flatMap(f => f.idxGroups).foreach(idxGroup => {
-      if (idxGroup.idxTextCoord >= 0)
+    for ((idxGroup, i) <- faceList.flatMap(f => f.idxGroups).zipWithIndex) {
+      if (idxGroup.idxTextCoord >= 0) {
         textCoordArr(idxGroup.idxPos) = textCoordList(idxGroup.idxTextCoord)
-      if (idxGroup.idxVecNormal >= 0)
+      }
+      if (idxGroup.idxVecNormal >= 0) {
         normArr(idxGroup.idxPos) = normList(idxGroup.idxVecNormal)
+      }
       indices(i) = idxGroup.idxPos
-      i = i + 1
-    })
+    }
 
     new Mesh(
       posList.flatMap(p => Array(p.x, p.y, p.z)),

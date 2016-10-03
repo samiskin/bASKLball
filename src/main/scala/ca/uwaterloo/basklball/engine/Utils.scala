@@ -1,8 +1,5 @@
 package ca.uwaterloo.basklball.engine
 
-import java.io.{BufferedReader, InputStreamReader}
-
-import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 object Utils {

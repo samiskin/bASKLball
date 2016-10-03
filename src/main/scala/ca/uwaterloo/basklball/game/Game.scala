@@ -51,19 +51,18 @@ class Game {
 
   def update(window: Window, interval: Long): Unit = {
     //TODO - show score!!!
-//    println(camera.position.toString)
     if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-      var (position, rotation) = (camera.position, camera.rotation)
-      position = new Vector3f
+      val position = new Vector3f
       // Position
       if (window.isKeyPressed(GLFW_KEY_A)) position.x -= 0.01f
       if (window.isKeyPressed(GLFW_KEY_D)) position.x += 0.01f
-      if (window.isKeyPressed(GLFW_KEY_W)) position.y += 0.01f
-      if (window.isKeyPressed(GLFW_KEY_S)) position.y -= 0.01f
-      if (window.isKeyPressed(GLFW_KEY_Q)) position.z += 0.01f
-      if (window.isKeyPressed(GLFW_KEY_E)) position.z -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_Q)) position.y += 0.01f
+      if (window.isKeyPressed(GLFW_KEY_E)) position.y -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_W)) position.z -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_S)) position.z += 0.01f
       camera.move(position)
       // Rotation
+      val rotation = camera.rotation
       if (window.isKeyPressed(GLFW_KEY_I)) rotation.x -= 1.0f
       if (window.isKeyPressed(GLFW_KEY_K)) rotation.x += 1.0f
       if (window.isKeyPressed(GLFW_KEY_J)) rotation.y -= 1.0f

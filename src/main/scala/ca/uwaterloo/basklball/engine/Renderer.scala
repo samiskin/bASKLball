@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import org.lwjgl.opengl.GL11._
 
@@ -36,7 +36,7 @@ class Renderer {
     val viewMatrix = transformation.viewMatrix(camera)
 
     for (gameObject <- gameObjects) {
-      val mesh = gameObject.mesh;
+      val mesh = gameObject.mesh
       val modelViewMatrix =
         transformation.modelViewMatrix(gameObject, viewMatrix)
       shaderProgram.setUniform("modelViewMatrix", modelViewMatrix)

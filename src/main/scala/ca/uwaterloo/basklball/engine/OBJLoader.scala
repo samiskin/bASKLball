@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Engine
+package ca.uwaterloo.basklball.engine
 
 import org.joml.{Vector2f, Vector3f}
 
@@ -13,56 +13,51 @@ object Face {}
 object OBJLoader {
   def loadMesh(fileName: String): Mesh = {
     val lines = Utils.readAllLines(fileName)
-    var vertices = new ArrayBuffer[Vector3f]()
-    var textures = new ArrayBuffer[Vector2f]()
-    var normals = new ArrayBuffer[Vector3f]()
-    var faces = new ArrayBuffer[Face]()
+    val vertices = new ArrayBuffer[Vector3f]()
+    val textures = new ArrayBuffer[Vector2f]()
+    val normals = new ArrayBuffer[Vector3f]()
+    val faces = new ArrayBuffer[Face]()
 
     lines.foreach((line) => {
       val tokens = line.split("\\s+")
-      if (tokens.length > 0) {
+      if (tokens.nonEmpty) {
         tokens(0) match {
-          case "v" => {
+          case "v" =>
             vertices += new Vector3f(
               tokens(1).toFloat,
               tokens(2).toFloat,
               tokens(3).toFloat
             )
-          }
-          case "vt" => {
+          case "vt" =>
             textures += new Vector2f(tokens(1).toFloat, 1 - tokens(2).toFloat)
-          }
-          case "vn" => {
+          case "vn" =>
             normals += new Vector3f(
               tokens(1).toFloat,
               tokens(2).toFloat,
               tokens(3).toFloat
             )
-          }
-          case "f" => {
+          case "f" =>
             faces += new Face(tokens(1), tokens(2), tokens(3))
-          }
-          case _ => {}
+          case _ =>
         }
       }
     })
-
-    return reorderLists(vertices.toArray, textures.toArray, normals.toArray, faces.toArray)
+    reorderLists(vertices.toArray, textures.toArray, normals.toArray, faces.toArray)
   }
 
   def reorderLists(posList: Array[Vector3f], textCoordList: Array[Vector2f], normList: Array[Vector3f], faceList: Array[Face]): Mesh = {
     val textCoordArr = new Array[Vector2f](posList.length)
     val normArr = new Array[Vector3f](posList.length)
     val indices = new Array[Int](faceList.length * 3)
-    var i = 0
-    faceList.flatMap(f => f.idxGroups).foreach(idxGroup => {
-      if (idxGroup.idxTextCoord >= 0)
+    for ((idxGroup, i) <- faceList.flatMap(f => f.idxGroups).zipWithIndex) {
+      if (idxGroup.idxTextCoord >= 0) {
         textCoordArr(idxGroup.idxPos) = textCoordList(idxGroup.idxTextCoord)
-      if (idxGroup.idxVecNormal >= 0)
+      }
+      if (idxGroup.idxVecNormal >= 0) {
         normArr(idxGroup.idxPos) = normList(idxGroup.idxVecNormal)
+      }
       indices(i) = idxGroup.idxPos
-      i = i + 1;
-    })
+    }
 
     new Mesh(
       posList.flatMap(p => Array(p.x, p.y, p.z)),
@@ -97,7 +92,7 @@ object OBJLoader {
         idxGroup.idxVecNormal = lineTokens(2).toInt - 1
       }
     }
-    return idxGroup
+    idxGroup
   }
 
   object IdxGroup { val NO_VALUE: Int = -1 }
@@ -106,7 +101,7 @@ object OBJLoader {
     var idxTextCoord: Int = IdxGroup.NO_VALUE
     var idxVecNormal: Int = IdxGroup.NO_VALUE
 
-    override def toString() = idxPos + "/" + idxTextCoord + "/" + idxVecNormal
+    override def toString = idxPos + "/" + idxTextCoord + "/" + idxVecNormal
   }
 
 }

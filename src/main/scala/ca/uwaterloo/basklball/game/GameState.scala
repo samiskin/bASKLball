@@ -1,4 +1,4 @@
-package ca.uwaterloo.basklball.Game
+package ca.uwaterloo.basklball.game
 
 import org.joml.Vector3f
 

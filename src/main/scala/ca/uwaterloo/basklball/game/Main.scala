@@ -18,10 +18,9 @@
  * Inspired by the source code found at: "http://www.lwjgl.org/guide".
  */
 
-package Game
+package ca.uwaterloo.basklball.game
 
-import ca.uwaterloo.basklball.Engine._
-import ca.uwaterloo.basklball.Game._;
+import ca.uwaterloo.basklball.engine._
 
 object Main extends App {
   private var window: Window = _
@@ -51,12 +50,12 @@ object Main extends App {
   private def loop(window: Window) {
     var prevTime = java.lang.System.currentTimeMillis()
     while (!window.shouldClose) {
-      var currTime = java.lang.System.currentTimeMillis()
-      game.update(window, currTime-prevTime) // TODO change interval
+      val currTime = java.lang.System.currentTimeMillis()
+      game.update(window, currTime - prevTime) // TODO change interval
       game.render(window)
 
       window.update()
-      prevTime = currTime;
+      prevTime = currTime
     }
   }
 

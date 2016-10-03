@@ -35,7 +35,10 @@ class Game {
 
   private val camera = {
     val camera = new Camera()
-    camera.position.z = 3f
+    camera.position.z = 0.25f
+    camera.position.x = 2.75f
+    camera.rotation.x = -10f
+    camera.rotation.y = -70f
     camera
   }
 

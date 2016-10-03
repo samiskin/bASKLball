@@ -73,10 +73,10 @@ class GameState {
     _anyPressedYet = _anyPressedYet || fingerJoint || palmJoint || forearmJoint || upperarmJoint
     if (_anyPressedYet) {
       // Joint rotations
-      if (fingerJoint) _fingerRotationVelocity -= 0.0001f
-      if (palmJoint) _palmRotationVelocity -= 0.0001f
-      if (forearmJoint) _forearmRotationVelocity -= 0.0001f
-      if (upperarmJoint) _upperarmRotationVelocity += 0.0001f
+      if (fingerJoint) _fingerRotationVelocity -= 0.001f
+      if (palmJoint) _palmRotationVelocity -= 0.001f
+      if (forearmJoint) _forearmRotationVelocity -= 0.001f
+      if (upperarmJoint) _upperarmRotationVelocity += 0.001f
 
       // Performing rotations
       _upperarmPosition.z += _upperarmRotationVelocity * timePassed

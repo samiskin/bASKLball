@@ -30,7 +30,7 @@ object OBJLoader {
             )
           }
           case "vt" => {
-            textures += new Vector2f(tokens(1).toFloat, tokens(2).toFloat)
+            textures += new Vector2f(tokens(1).toFloat, 1 - tokens(2).toFloat)
           }
           case "vn" => {
             normals += new Vector3f(

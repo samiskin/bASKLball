@@ -1,6 +1,7 @@
 package ca.uwaterloo.basklball.Game
 
 import ca.uwaterloo.basklball.Engine._
+import org.joml.Vector3f
 import org.lwjgl.glfw.GLFW._
 
 object Game {
@@ -21,6 +22,7 @@ class Game {
   private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")
 
   // A cube despite the name
+  sphereMesh.colour = new Vector3f(185,91,1)
   private val ball = new GameObject(sphereMesh, scale=GameState.BALL_RADIUS)
   private val upperarm = {
     val upperarm = new GameObject(cubeMesh, scale=GameState.UPPERARM_LENGTH)
@@ -36,30 +38,31 @@ class Game {
     val obelisk = new GameObject(obeliskMesh)
     obelisk.position.x = -1f
     skybox.scale = 20.0f
-    Array(ball, upperarm, forearm, palm, finger, skybox, obelisk)
+    Array(ball, upperarm, forearm, palm, finger, skybox)
   }
 
   private val camera = {
     val camera = new Camera()
-    camera.position.z = 0.25f
-    camera.position.x = 2.75f
-    camera.rotation.x = -10f
-    camera.rotation.y = -70f
+    camera.position.x = -0.89f
+    camera.position.y = 1.31f
+    camera.position.z = 3.42f
     camera
   }
 
   def update(window: Window, interval: Long): Unit = {
     //TODO - show score!!!
-    println(gameState.score)
+//    println(camera.position.toString)
     if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-      val (position, rotation) = (camera.position, camera.rotation)
+      var (position, rotation) = (camera.position, camera.rotation)
+      position = new Vector3f
       // Position
+      if (window.isKeyPressed(GLFW_KEY_A)) position.x -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_D)) position.x += 0.01f
       if (window.isKeyPressed(GLFW_KEY_W)) position.y += 0.01f
-      if (window.isKeyPressed(GLFW_KEY_A)) position.z += 0.01f
       if (window.isKeyPressed(GLFW_KEY_S)) position.y -= 0.01f
-      if (window.isKeyPressed(GLFW_KEY_D)) position.z -= 0.01f
-      if (window.isKeyPressed(GLFW_KEY_Q)) position.x += 0.01f
-      if (window.isKeyPressed(GLFW_KEY_E)) position.x -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_Q)) position.z += 0.01f
+      if (window.isKeyPressed(GLFW_KEY_E)) position.z -= 0.01f
+      camera.move(position)
       // Rotation
       if (window.isKeyPressed(GLFW_KEY_I)) rotation.x -= 1.0f
       if (window.isKeyPressed(GLFW_KEY_K)) rotation.x += 1.0f

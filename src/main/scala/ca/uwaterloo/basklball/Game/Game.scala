@@ -12,6 +12,9 @@ class Game {
   private val renderer = new Renderer()
   private var gameState = new GameState()
 
+  private val obeliskMesh = OBJLoader.loadMesh("/models/obelisk-split.obj")
+  private val obeliskTexture = new Texture("/textures/obelisk.png")
+  obeliskMesh.texture = obeliskTexture
   private val cubeMesh = OBJLoader.loadMesh("/models/metal-obelisk.obj")
   private val metalTexture = new Texture("/textures/metal.png")
   cubeMesh.texture = metalTexture
@@ -30,9 +33,10 @@ class Game {
 
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
+    val obelisk = new GameObject(obeliskMesh)
     skybox.scale = 20.0f
     //Array(ball, upperarm, forearm, palm, finger, skybox) TODO UNCOMMENT
-    Array(upperarm, forearm, palm, finger, skybox)
+    Array(upperarm, forearm, palm, finger, skybox, obelisk)
   }
 
   private val camera = {

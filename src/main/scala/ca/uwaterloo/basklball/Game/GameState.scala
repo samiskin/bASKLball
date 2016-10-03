@@ -39,8 +39,8 @@ class GameState {
   private val _minForearmAngle = 0f; // elbow can't bend past straight
 
   private var _palmPosition =
-    new Vector3f(_forearmPosition.x + GameState.FOREARM_LENGTH * Math.sin(_forearmPosition.z).toFloat,
-                 _forearmPosition.y + GameState.FOREARM_LENGTH * Math.cos(_forearmPosition.z).toFloat,
+    new Vector3f(GameState.FOREARM_LENGTH * Math.cos(Math.toRadians(forearmNetAngle)).toFloat + _forearmPosition.x,
+                 GameState.FOREARM_LENGTH * Math.sin(Math.toRadians(forearmNetAngle)).toFloat - _forearmPosition.y,
                  45f)
   def palmPosition = _palmPosition
   def palmNetAngle = _palmPosition.z + forearmNetAngle
@@ -48,7 +48,7 @@ class GameState {
   private val _maxPalmAngle = 90f; // wrist can bend back 90 deg
   private val _minPalmAngle = -90f; // wrist can bend forward 90 deg
 
-  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y - GameState.PALM_LENGTH, -30f)
+  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y + GameState.PALM_LENGTH, -30f)
   def fingerPosition = _fingerPosition
   def fingerNetAngle = _fingerPosition.z + palmNetAngle
   private var _fingerRotationVelocity = 0f

@@ -144,11 +144,13 @@ class GameState {
         ballAccel.y = -((GameState.BALL_RADIUS-distancePalm)*Math.cos(Math.toRadians(palmNetAngle)).toFloat/timePassed)
       }
 
-      // Moving ball
-      _ballVelocity.add(ballAccel)
-      _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
-      if (_ballPosition.x > GameState.BALL_RADIUS) {
+      if (_ballPosition.x < GameState.BALL_RADIUS) {
+        _ballVelocity = new Vector3f(0f)
+      } else {
+        // Moving ball
         _score = -_ballPosition.y
+        _ballVelocity.add(ballAccel)
+        _ballPosition.add(new Vector3f(_ballVelocity).mul(timePassed))
       }
     }
   }

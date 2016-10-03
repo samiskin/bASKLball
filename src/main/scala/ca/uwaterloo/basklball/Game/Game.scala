@@ -12,7 +12,7 @@ class Game {
   private val renderer = new Renderer()
   private var gameState = new GameState()
 
-  private val cubeMesh = OBJLoader.loadMesh("/models/metal-prism.obj")
+  private val cubeMesh = OBJLoader.loadMesh("/models/metal-obelisk.obj")
   private val metalTexture = new Texture("/textures/metal.png")
   cubeMesh.texture = metalTexture
   private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")

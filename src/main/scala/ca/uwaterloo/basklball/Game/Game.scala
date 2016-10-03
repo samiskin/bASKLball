@@ -13,6 +13,8 @@ class Game {
   private var gameState = new GameState()
 
   private val cubeMesh = OBJLoader.loadMesh("/models/metal-prism.obj")
+  private val metalTexture = new Texture("/textures/metal.png")
+  cubeMesh.texture = metalTexture
   private val sphereMesh = OBJLoader.loadMesh("/models/sphere.obj")
 
   // A cube despite the name
@@ -43,12 +45,25 @@ class Game {
   }
 
   def update(window: Window, interval: Long): Unit = {
-    if (window.isKeyPressed(GLFW_KEY_RIGHT)) camera.position.x += 0.05f
-    if (window.isKeyPressed(GLFW_KEY_LEFT)) camera.position.x -= 0.05f
-    if (window.isKeyPressed(GLFW_KEY_UP)) camera.position.z -= 0.05f
-    if (window.isKeyPressed(GLFW_KEY_DOWN)) camera.position.z += 0.05f
-    if (window.isKeyPressed(GLFW_KEY_9)) camera.rotation.y -= 1f
-    if (window.isKeyPressed(GLFW_KEY_0)) camera.rotation.y += 1f
+    if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+      val (position, rotation) = (camera.position, camera.rotation)
+      // Position
+      if (window.isKeyPressed(GLFW_KEY_W)) position.y += 0.01f
+      if (window.isKeyPressed(GLFW_KEY_A)) position.z += 0.01f
+      if (window.isKeyPressed(GLFW_KEY_S)) position.y -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_D)) position.z -= 0.01f
+      if (window.isKeyPressed(GLFW_KEY_Q)) position.x += 0.01f
+      if (window.isKeyPressed(GLFW_KEY_E)) position.x -= 0.01f
+      // Rotation
+      if (window.isKeyPressed(GLFW_KEY_I)) rotation.x -= 1.0f
+      if (window.isKeyPressed(GLFW_KEY_K)) rotation.x += 1.0f
+      if (window.isKeyPressed(GLFW_KEY_J)) rotation.y -= 1.0f
+      if (window.isKeyPressed(GLFW_KEY_L)) rotation.y += 1.0f
+      if (window.isKeyPressed(GLFW_KEY_U)) rotation.z += 1.0f
+      if (window.isKeyPressed(GLFW_KEY_O)) rotation.z -= 1.0f
+      if (window.isKeyPressed(GLFW_KEY_SPACE)) { position.zero(); rotation.zero() }
+      return;
+    }
 
     if (window.isKeyPressed(GLFW_KEY_ENTER)) gameState = new GameState()
 
@@ -76,54 +91,6 @@ class Game {
     finger.position.y = gameState.fingerPosition.x
     finger.position.z = gameState.fingerPosition.y
     finger.rotation.x = gameState.fingerNetAngle
-
-    /*
-    val (position, rotation) = {
-        (camera.position, camera.rotation)
-    }
-    // Position
-    if (window.isKeyPressed(GLFW_KEY_W)) {
-      position.y += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_A)) {
-      position.x -= 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_S)) {
-      position.y -= 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_D)) {
-      position.x += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_Q)) {
-      position.z += 0.01f
-    }
-    if (window.isKeyPressed(GLFW_KEY_E)) {
-      position.z -= 0.01f
-    }
-    // Rotation
-    if (window.isKeyPressed(GLFW_KEY_I)) {
-      rotation.x -= 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_K)) {
-      rotation.x += 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_J)) {
-      rotation.y -= 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_L)) {
-      rotation.y += 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_U)) {
-      rotation.z += 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_O)) {
-      rotation.z -= 1.0f
-    }
-    if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-      camera.position.zero()
-      camera.rotation.zero()
-    }
-    */
   }
 
   def render(window: Window): Unit = {

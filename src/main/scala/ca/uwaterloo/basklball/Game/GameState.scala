@@ -14,6 +14,8 @@ object GameState {
 }
 
 class GameState {
+  private var _score = 0f
+  def score = _score
   // All vectors are y,z,pitch co-ordinates, NOT x,y,z. Vector3f is used for convenience over tuples, which are useless.
   // This game takes place on a 2f plan going away from the camera. Thus, all positions are away from the camera, and in
   // the y,z plane. There is no way to add x (yaw) or y (roll) rotation, only pitch (aka top/backspin on the ball).
@@ -57,8 +59,8 @@ class GameState {
 
 
   // The ball is referenced from its center.
-  private var _ballPosition = new Vector3f(_fingerPosition.x + GameState.BALL_RADIUS,
-                                           (_fingerPosition.y + _palmPosition.y)/2f,
+  private var _ballPosition = new Vector3f(_fingerPosition.x + GameState.BALL_RADIUS*1.05f,
+                                           _fingerPosition.y,
                                            0f)
   def ballPosition = _ballPosition
   private var _ballVelocity = new Vector3f(0f, 0f, 0f)
@@ -113,14 +115,24 @@ class GameState {
       val fingertipY = GameState.FINGER_LENGTH * Math.cos(Math.toRadians(fingerNetAngle)).toFloat + _fingerPosition.y
 
       var ballAccel = new Vector3f(0f)
-      ballAccel.x = -0.00003f
+      ballAccel.x = -0.00005f
 
-      val distanceFinger = distance((_fingerPosition.x, _fingerPosition.y), (fingertipX, fingertipY), (_ballPosition.x, _ballPosition.y))
-      val distancePalm = distance((_fingerPosition.x, _fingerPosition.y), (_palmPosition.x, _palmPosition.y), (_ballPosition.x, _ballPosition.y))
+      val distanceFinger = distance((_fingerPosition.x, _fingerPosition.y), (fingertipX, fingertipY), (_ballPosition.x, _ballPosition.y)) - GameState.FINGER_LENGTH*0.3f/2f
+      val distancePalm = distance((_fingerPosition.x, _fingerPosition.y), (_palmPosition.x, _palmPosition.y), (_ballPosition.x, _ballPosition.y)) - GameState.PALM_LENGTH*0.3f/2f
+      val distanceForearm = distance((_forearmPosition.x, _forearmPosition.y), (_palmPosition.x, _palmPosition.y), (_ballPosition.x, _ballPosition.y)) - GameState.FOREARM_LENGTH*0.3f/2f
 
       if (distanceFinger < GameState.BALL_RADIUS) {
         ballAccel.x = (GameState.BALL_RADIUS - distanceFinger) * Math.sin(Math.toRadians(fingerNetAngle)).toFloat / timePassed - _ballVelocity.x
         ballAccel.y = -((GameState.BALL_RADIUS - distanceFinger) * Math.cos(Math.toRadians(fingerNetAngle)).toFloat / timePassed)
+        if (distancePalm < GameState.BALL_RADIUS || distanceForearm < GameState.BALL_RADIUS) {
+          // Moving ball
+          _ballVelocity.add(ballAccel)
+          _ballPosition.add(new Vector3f(_ballVelocity).mul(timePassed))
+        }
+      }
+      if (distanceForearm < GameState.BALL_RADIUS) {
+        ballAccel.x = (GameState.BALL_RADIUS - distanceForearm) * Math.sin(Math.toRadians(forearmNetAngle)).toFloat / timePassed - _ballVelocity.x
+        ballAccel.y = -((GameState.BALL_RADIUS - distanceForearm) * Math.cos(Math.toRadians(forearmNetAngle)).toFloat / timePassed)
         if (distancePalm < GameState.BALL_RADIUS) {
           // Moving ball
           _ballVelocity.add(ballAccel)
@@ -135,6 +147,9 @@ class GameState {
       // Moving ball
       _ballVelocity.add(ballAccel)
       _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
+      if (_ballPosition.x > GameState.BALL_RADIUS) {
+        _score = -_ballPosition.y
+      }
     }
   }
 }

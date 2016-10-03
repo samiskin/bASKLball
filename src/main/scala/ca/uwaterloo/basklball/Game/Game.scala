@@ -34,6 +34,7 @@ class Game {
   private val gameObjects = {
     val skybox = new Skybox("/textures/skybox.png")
     val obelisk = new GameObject(obeliskMesh)
+    obelisk.position.x = -1f
     skybox.scale = 20.0f
     Array(ball, upperarm, forearm, palm, finger, skybox, obelisk)
   }
@@ -48,6 +49,8 @@ class Game {
   }
 
   def update(window: Window, interval: Long): Unit = {
+    //TODO - show score!!!
+    println(gameState.score)
     if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
       val (position, rotation) = (camera.position, camera.rotation)
       // Position

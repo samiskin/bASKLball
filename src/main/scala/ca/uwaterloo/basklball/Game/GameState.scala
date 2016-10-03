@@ -33,7 +33,7 @@ class GameState {
 
   private var _forearmPosition = new Vector3f(0f, _upperarmPosition.y + GameState.UPPERARM_LENGTH, 135f)
   def forearmPosition = _forearmPosition
-  def forearmNetAngle = _forearmPosition.z + upperarmNetAngle
+  def forearmNetAngle = _forearmPosition.z - upperarmNetAngle
   private var _forearmRotationVelocity = 0f
   private val _maxForearmAngle = 140f; // elbow can bend towards you somewhat close to 180
   private val _minForearmAngle = 0f; // elbow can't bend past straight
@@ -48,7 +48,7 @@ class GameState {
   private val _maxPalmAngle = 90f; // wrist can bend back 90 deg
   private val _minPalmAngle = -90f; // wrist can bend forward 90 deg
 
-  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y - GameState.PALM_LENGTH, 30f)
+  private var _fingerPosition = new Vector3f(_palmPosition.x, _palmPosition.y - GameState.PALM_LENGTH, -30f)
   def fingerPosition = _fingerPosition
   def fingerNetAngle = _fingerPosition.z + palmNetAngle
   private var _fingerRotationVelocity = 0f
@@ -93,12 +93,12 @@ class GameState {
       if (_fingerPosition.z < _minFingerAngle) { _fingerPosition.z = _minFingerAngle; _fingerRotationVelocity = 0 }
 
       // Updating joint positions
-      _forearmPosition.x = GameState.UPPERARM_LENGTH * Math.cos(forearmNetAngle).toFloat
-      _forearmPosition.y = GameState.UPPERARM_LENGTH * Math.sin(forearmNetAngle).toFloat
-      _palmPosition.x = GameState.FOREARM_LENGTH * Math.cos(palmNetAngle).toFloat + _forearmPosition.x
-      _palmPosition.y = GameState.FOREARM_LENGTH * Math.sin(palmNetAngle).toFloat + _forearmPosition.y
-      _fingerPosition.x = GameState.PALM_LENGTH * Math.cos(fingerNetAngle).toFloat + _palmPosition.x
-      _fingerPosition.y = GameState.PALM_LENGTH * Math.sin(fingerNetAngle).toFloat + _palmPosition.y
+      _forearmPosition.x = GameState.UPPERARM_LENGTH * Math.cos(Math.toRadians(upperarmNetAngle)).toFloat
+      _forearmPosition.y = GameState.UPPERARM_LENGTH * Math.sin(Math.toRadians(upperarmNetAngle)).toFloat
+      _palmPosition.x = GameState.FOREARM_LENGTH * Math.cos(Math.toRadians(forearmNetAngle)).toFloat + _forearmPosition.x
+      _palmPosition.y = GameState.FOREARM_LENGTH * Math.sin(Math.toRadians(forearmNetAngle)).toFloat - _forearmPosition.y
+      _fingerPosition.x = GameState.PALM_LENGTH * Math.cos(Math.toRadians(palmNetAngle)).toFloat + _palmPosition.x
+      _fingerPosition.y = GameState.PALM_LENGTH * Math.sin(Math.toRadians(palmNetAngle)).toFloat + _palmPosition.y
 
       // Moving ball
       _ballPosition.add( new Vector3f(_ballVelocity).mul(timePassed) )
